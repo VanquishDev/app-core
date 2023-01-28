@@ -6,7 +6,10 @@ const nextConfig = {
     '@stencil/core',
     'ionicons'
   ],
-  env: { },
+  env: {
+    url: 'https://main.d11ohwancun91i.amplifyapp.com/',
+    userPoolId: process.env.userPoolId
+   },
   experimental: {
     appDir: true,
   },

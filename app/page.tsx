@@ -1,4 +1,5 @@
 import { Inter } from '@next/font/google';
+import { json } from 'stream/consumers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -8,6 +9,10 @@ export default function Home() {
       <h2 className={inter.className}>
         Hello folder app nextjs.
       </h2>
+      <pre>{JSON.stringify({
+        url: `${process.env.url}`,
+        userPoolId: `${process.env.userPoolId}`
+      }, null, 4)}</pre>
     </main>
   );
 }
