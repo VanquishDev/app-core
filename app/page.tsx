@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className='p-4'>
       <h2 className={inter.className}>
-        Hello folder app nextjs.
+        Hello folder app nextjs 13.
       </h2>
       <pre>{JSON.stringify({
         url: `${process.env.url}`,
