@@ -13,42 +13,25 @@ type DataType = {
 };
 
 interface ContextProps {
-  backend: any,
-  userId: string;
-  setUserId: Dispatch<SetStateAction<string>>;
+  userID: string;
+  setUserID: Dispatch<SetStateAction<string>>;
   data: DataType[];
   setData: Dispatch<SetStateAction<DataType[]>>;
 }
 
 const GlobalContext = createContext<ContextProps>({
-  backend: {},
-  userId: '',
-  setUserId: (): string => '',
+  userID: '',
+  setUserID: (): string => '',
   data: [],
   setData: (): DataType[] => [],
 });
 
 export const GlobalContextProvider = ({ children }: any) => {
-  const backend = {
-    stackCodeName: `${process.env.stackCodeName}`,
-    branchName: `${process.env.branchName}`,
-    url: `${process.env.url}`,
-    userPoolId: `${process.env.userPoolId}`,
-    userPoolClientId: `${process.env.userPoolClientId}`,
-    userPoolRegion: `${process.env.userPoolRegion}`,
-    identityPoolId: `${process.env.identityPoolId}`,
-    graphqlURL: `${process.env.graphqlURL}`,
-    graphqlApiKey: `${process.env.graphqlApiKey}`,
-    bucketName: `${process.env.bucketName}`,
-    bucketRegion: `${process.env.bucketRegion}`,
-    cloudFrontDistribution: `${process.env.cloudFrontDistribution}`,
-  };
-
-  const [userId, setUserId] = useState('');
+  const [userID, setUserID] = useState('');
   const [data, setData] = useState<[] | DataType[]>([]);
 
   return (
-    <GlobalContext.Provider value={{ backend, userId, setUserId, data, setData }}>
+    <GlobalContext.Provider value={{ userID, setUserID, data, setData }}>
       {children}
     </GlobalContext.Provider>
   );
