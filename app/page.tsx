@@ -4,12 +4,20 @@ import { json } from 'stream/consumers';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
+  
   const backend = {
-    url: `${process.env.url}`,
-    userPoolId: `${process.env.userPoolId}`,
-    graphqlURL: `${process.env.graphqlURL}`,
     stackCodeName: `${process.env.stackCodeName}`,
     branchName: `${process.env.branchName}`,
+    url: `${process.env.url}`,
+    userPoolId: `${process.env.userPoolId}`,
+    userPoolClientId: `${process.env.userPoolClientId}`,
+    userPoolRegion: `${process.env.userPoolRegion}`,
+    identityPoolId: `${process.env.identityPoolId}`,
+    graphqlURL: `${process.env.graphqlURL}`,
+    graphqlApiKey: `${process.env.graphqlApiKey}`,
+    bucketName: `${process.env.bucketName}`,
+    bucketRegion: `${process.env.bucketRegion}`,
+    cloudFrontDistribution: `${process.env.cloudFrontDistribution}`,
   };
 
   return (

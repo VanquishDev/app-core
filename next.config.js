@@ -8,11 +8,20 @@ const nextConfig = {
   ],
   env: {
     url: 'https://main.d11ohwancun91i.amplifyapp.com/',
-    userPoolId: process.env.userPoolId,
-    graphqlURL: process.env.graphqlURL,
-    stackCodeName: process.env.stackCodeName,
-    branchName: process.env.branchName
-   },
+    backend: {
+      stackCodeName: process.env.stackCodeName,
+      branchName: process.env.branchName,
+      userPoolId: process.env.userPoolId,
+      userPoolClientId: process.env.userPoolClientId,
+      userPoolRegion: process.env.userPoolRegion,
+      identityPoolId: process.env.identityPoolId,
+      graphqlURL: process.env.graphqlURL,
+      graphqlApiKey: process.env.graphqlApiKey,
+      bucketName: process.env.bucketName,
+      bucketRegion: process.env.bucketRegion,
+      cloudFrontDistribution: process.env.cloudFrontDistribution,
+    }
+  },
   experimental: {
     appDir: true,
   },
