@@ -27,7 +27,7 @@ import '@/styles/variables.css'
 import { useEffect } from 'react';
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
-import { UserContextProvider } from '../contexts/userContext';
+import { UserContextProvider } from '../context/userContext';
 
 setupIonicReact();
 
