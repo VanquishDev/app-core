@@ -9,6 +9,7 @@ const nextConfig = {
     'ionicons'
   ],
   env: {
+    domain: 'main.d11ohwancun91i.amplifyapp.com',
     url: 'https://main.d11ohwancun91i.amplifyapp.com/',
     backend: {
       stackCodeName: process.env.stackCodeName,
