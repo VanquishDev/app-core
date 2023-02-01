@@ -10,13 +10,7 @@ import {
 } from '@ionic/react';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
-
 import { useGlobalContext } from 'context/GlobalContext';
-
-import {
-  withAuthenticator,
-  WithAuthenticatorProps,
-} from '@aws-amplify/ui-react';
 
 window
   .matchMedia('(prefers-color-scheme: dark)')
@@ -28,15 +22,7 @@ window
     } catch {}
   });
 
-interface Props extends WithAuthenticatorProps {
-  isPassedToWithAuthenticator: boolean;
-}
-
-const App = ({ isPassedToWithAuthenticator, signOut, user }: Props) => {
-  if (!isPassedToWithAuthenticator) {
-    throw new Error(`isPassedToWithAuthenticator was not provided`);
-  }
-
+const App = ({ user }: any) => {
   const { theme } = useGlobalContext();
 
   return (
@@ -76,35 +62,8 @@ const App = ({ isPassedToWithAuthenticator, signOut, user }: Props) => {
         <div className="mt-6 text-xl font-bold">Login</div>
         <pre className="mt-2"></pre>
       </IonContent>
-
-      <IonFooter>
-        <IonToolbar>
-          <IonTitle>
-            <button onClick={signOut}>signOut{user?.username}!</button>
-          </IonTitle>
-        </IonToolbar>
-      </IonFooter>
     </IonApp>
   );
 };
 
-export default withAuthenticator(App, {
-  initialState: 'signIn',
-  loginMechanisms: ['username'],
-  signUpAttributes: [
-    'name',
-    'email',
-    'phone_number',
-    'picture'
-    // 'birthdate'
-  ],
-  socialProviders: [] // 'amazon', 'apple', 'facebook', 'google'
-});
-
-export async function getStaticProps() {
-  return {
-    props: {
-      isPassedToWithAuthenticator: true,
-    },
-  };
-}
+export default App;

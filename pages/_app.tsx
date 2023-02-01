@@ -73,7 +73,6 @@ import '@/styles/variables.css';
 import 'tailwindcss/tailwind.css';
 
 
-
 import { useEffect } from 'react';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
 import { GlobalContextProvider } from '../context/GlobalContext';
