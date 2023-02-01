@@ -11,6 +11,7 @@ import {
 
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { useGlobalContext } from 'context/GlobalContext';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 window
   .matchMedia('(prefers-color-scheme: dark)')
@@ -22,8 +23,9 @@ window
     } catch {}
   });
 
-const App = ({ user }: any) => {
+const App = () => {
   const { theme } = useGlobalContext();
+  const { user, signOut } = useAuthenticator((context) => [context.user]);
 
   return (
     <IonApp>
@@ -60,7 +62,7 @@ const App = ({ user }: any) => {
         </pre>
 
         <div className="mt-6 text-xl font-bold">Login</div>
-        <pre className="mt-2"></pre>
+        <pre className="mt-2"><button onClick={signOut}>Sign Out</button></pre>
       </IonContent>
     </IonApp>
   );

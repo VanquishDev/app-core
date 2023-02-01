@@ -13,12 +13,12 @@ const App = dynamic(() => import('components/Admin'), {
   ssr: false,
 });
 
-function Index({ isPassedToWithAuthenticator, signOut, user }: Props) {
+function Index({ isPassedToWithAuthenticator }: Props) {
   if (!isPassedToWithAuthenticator) {
     throw new Error(`isPassedToWithAuthenticator was not provided`);
   }
   
-  return <App user={user} />;
+  return <App />;
 }
 
 export default withAuthenticator(App)
