@@ -1,9 +1,9 @@
+import dynamic from 'next/dynamic';
+
 import {
   withAuthenticator,
   WithAuthenticatorProps,
 } from '@aws-amplify/ui-react';
-
-import dynamic from 'next/dynamic';
 
 interface Props extends WithAuthenticatorProps {
   isPassedToWithAuthenticator: boolean;
@@ -24,12 +24,8 @@ function Index({ isPassedToWithAuthenticator }: Props) {
 export default withAuthenticator(App, {
   initialState: 'signIn',
   loginMechanisms: ['username', 'email', 'phone_number'],
-  signUpAttributes: [
-    'name',
-    'email',
-    'phone_number'
-  ],
-  socialProviders: [] // 'amazon', 'apple', 'facebook', 'google'
+  signUpAttributes: ['name', 'email', 'phone_number'],
+  socialProviders: [], // 'amazon', 'apple', 'facebook', 'google'
 });
 
 export async function getStaticProps() {

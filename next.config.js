@@ -9,8 +9,9 @@ const nextConfig = {
     'ionicons'
   ],
   env: {
-    domain: 'main.d1lrnjgi26g77x.amplifyapp.com',
-    url: 'https://main.d1lrnjgi26g77x.amplifyapp.com',
+    domain: `${process.env.branchName}.d2jdj4wnytwo62.amplifyapp.com`,
+    stackCodeName: process.env.stackCodeName,
+    branchName: process.env.branchName,
     region: process.env.region,
     userPoolId: process.env.userPoolId,
     userPoolClientId: process.env.userPoolClientId,
