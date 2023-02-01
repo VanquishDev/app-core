@@ -5,5 +5,5 @@ const App = dynamic(() => import('components/Admin'), {
 });
 
 export default function Index() {
-  return <App />;
+  return <App isPassedToWithAuthenticator={false} />;
 }
