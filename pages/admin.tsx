@@ -17,11 +17,20 @@ function Index({ isPassedToWithAuthenticator }: Props) {
   if (!isPassedToWithAuthenticator) {
     throw new Error(`isPassedToWithAuthenticator was not provided`);
   }
-  
+
   return <App />;
 }
 
-export default withAuthenticator(App)
+export default withAuthenticator(App, {
+  initialState: 'signIn',
+  loginMechanisms: ['username'],
+  signUpAttributes: [
+    'name',
+    'email',
+    'phone_number'
+  ],
+  socialProviders: [] // 'amazon', 'apple', 'facebook', 'google'
+});
 
 export async function getStaticProps() {
   return {

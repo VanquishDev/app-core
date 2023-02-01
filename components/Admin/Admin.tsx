@@ -38,8 +38,6 @@ const App = () => {
       <IonContent className="ion-padding">
         <div className="text-xl font-bold">Backend Environments</div>
         <pre className="mt-2 bg-slate-100 rounded-lg p-4">
-          <div>stackCodeName: {process.env.stackCodeName}</div>
-          <div>branchName: {process.env.branchName}</div>
           <div>userPoolId: {process.env.userPoolId}</div>
           <div>userPoolClientId: {process.env.userPoolClientId}</div>
           <div>userPoolRegion: {process.env.userPoolRegion}</div>

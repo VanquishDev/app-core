@@ -11,8 +11,7 @@ const nextConfig = {
   env: {
     domain: 'main.d1lrnjgi26g77x.amplifyapp.com',
     url: 'https://main.d1lrnjgi26g77x.amplifyapp.com',
-    stackCodeName: process.env.stackCodeName,
-    branchName: process.env.branchName,
+    region: process.env.region,
     userPoolId: process.env.userPoolId,
     userPoolClientId: process.env.userPoolClientId,
     userPoolRegion: process.env.userPoolRegion,

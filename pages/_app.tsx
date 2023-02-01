@@ -2,37 +2,35 @@
 import { Amplify, I18n } from 'aws-amplify';
 
 Amplify.configure({
-  Auth: {
-    identityPoolId: `${process.env.identityPoolId}`,
-    region: `${process.env.userPoolRegion}`,
-    userPoolId: `${process.env.userPoolId}`,
-    userPoolWebClientId: `${process.env.userPoolClientId}`,
-    signUpVerificationMethod: 'code', // 'code' | 'link'
-    cookieStorage: {
-      domain: `.${process.env.domain}`,
-      path: '/',
-      expires: 365,
-      sameSite: 'strict', // | "lax", See: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
-      secure: true,
-    },
-    /*
-        authenticationFlowType: 'USER_SRP_AUTH',
-        clientMetadata: { myCustomKey: 'myCustomValue' },
-        oauth: {
-            domain: 'your_cognito_domain',
-            scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
-            redirectSignIn: 'http://localhost:3000/',
-            redirectSignOut: 'http://localhost:3000/',
-            responseType: 'code' // or 'token', note that REFRESH token will only be generated when the responseType is code
-        }
-        */
+  aws_project_region: `${process.env.region}`,
+  aws_cognito_identity_pool_id: `${process.env.identityPoolId}`,
+  aws_cognito_region: `${process.env.userPoolRegion}`,
+  aws_user_pools_id: `${process.env.userPoolId}`,
+  aws_user_pools_web_client_id: `${process.env.userPoolClientId}`,
+  oauth: {
+    // domain: 'your_cognito_domain',
+    // scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
+    // redirectSignIn: 'http://localhost:3000/',
+    // redirectSignOut: 'http://localhost:3000/',
+    // responseType: 'code' // or 'token', note that REFRESH token will only be generated when the responseType is code
   },
-  Storage: {
-    AWSS3: {
-      bucket: `${process.env.bucketName}`,
-      region: `${process.env.bucketRegion}`,
-    },
+  aws_cognito_username_attributes: ['username'],
+  aws_cognito_social_providers: [],
+  aws_cognito_signup_attributes: ['name', 'email', 'phone_number'],
+  aws_cognito_mfa_configuration: 'OFF',
+  aws_cognito_mfa_types: [],
+  aws_cognito_password_protection_settings: {
+    passwordPolicyMinLength: 6,
+    passwordPolicyCharacters: [
+      // "REQUIRES_LOWERCASE",
+      // "REQUIRES_UPPERCASE",
+      // 'REQUIRES_NUMBERS',
+      // "REQUIRES_SYMBOLS"
+    ],
   },
+  aws_cognito_verification_mechanisms: ['email'],
+  aws_user_files_s3_bucket: `${process.env.bucketName}`,
+  aws_user_files_s3_bucket_region: `${process.env.bucketRegion}`,
 });
 
 import { translations } from '@aws-amplify/ui-react';
@@ -44,7 +42,7 @@ I18n.putVocabulariesForLanguage('pt', {
 });
 
 import { Authenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css'; 
+import '@aws-amplify/ui-react/styles.css';
 
 import { setupIonicReact } from '@ionic/react';
 
@@ -71,7 +69,6 @@ import '@/styles/globals.css';
 import '@/styles/variables.css';
 
 import 'tailwindcss/tailwind.css';
-
 
 import { useEffect } from 'react';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
