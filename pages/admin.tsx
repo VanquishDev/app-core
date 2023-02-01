@@ -23,7 +23,7 @@ function Index({ isPassedToWithAuthenticator }: Props) {
 
 export default withAuthenticator(App, {
   initialState: 'signIn',
-  loginMechanisms: ['username'],
+  loginMechanisms: ['username', 'email', 'phone_number'],
   signUpAttributes: [
     'name',
     'email',
