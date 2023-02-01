@@ -9,25 +9,20 @@ const nextConfig = {
     'ionicons'
   ],
   env: {
-    domain: 'main.d11ohwancun91i.amplifyapp.com',
-    url: 'https://main.d11ohwancun91i.amplifyapp.com/',
-    backend: {
-      stackCodeName: process.env.stackCodeName,
-      branchName: process.env.branchName,
-      userPoolId: process.env.userPoolId,
-      userPoolClientId: process.env.userPoolClientId,
-      userPoolRegion: process.env.userPoolRegion,
-      identityPoolId: process.env.identityPoolId,
-      graphqlURL: process.env.graphqlURL,
-      graphqlApiKey: process.env.graphqlApiKey,
-      bucketName: process.env.bucketName,
-      bucketRegion: process.env.bucketRegion,
-      cloudFrontDistribution: process.env.cloudFrontDistribution,
-    }
-  },
-  experimental: {
-    appDir: true,
-  },
+    domain: 'main.d1lrnjgi26g77x.amplifyapp.com',
+    url: 'https://main.d1lrnjgi26g77x.amplifyapp.com',
+    stackCodeName: process.env.stackCodeName,
+    branchName: process.env.branchName,
+    userPoolId: process.env.userPoolId,
+    userPoolClientId: process.env.userPoolClientId,
+    userPoolRegion: process.env.userPoolRegion,
+    identityPoolId: process.env.identityPoolId,
+    graphqlURL: process.env.graphqlURL,
+    graphqlApiKey: process.env.graphqlApiKey,
+    bucketName: process.env.bucketName,
+    bucketRegion: process.env.bucketRegion,
+    bucketCloudFront: process.env.bucketCloudFront,
+  }
 }
 
 module.exports = nextConfig
