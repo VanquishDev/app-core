@@ -2301,10 +2301,10 @@
     debug "^4.0.0"
     tslib "^2.0.1"
 
-"@ionic/core@6.5.1", "@ionic/core@^6.5.0":
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-6.5.1.tgz#36efef2d807d424ab5eae543555177044088ab16"
-  integrity sha512-O696r+4/f0Ly0XvPH1ZcsTBwiQLWf5gCDG1CoAn9W/F84DcvzGV9acV9nmpEDcrqaSLFYjJHGpeCec9y7L50iw==
+"@ionic/core@6.5.2", "@ionic/core@^6.5.0":
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/@ionic/core/-/core-6.5.2.tgz#92544e01d04dd5189006db59ba9d064c9e40a869"
+  integrity sha512-9SQedXM0Hohy6ydgJVA22Ls6DeDgVJdlUHgaxQUNhtqIZuCqbaYZMEoanflMc852qkIyQtF25Zh7Q2wIVZveWw==
   dependencies:
     "@stencil/core" "^2.18.0"
     ionicons "^6.1.1"
@@ -2316,19 +2316,19 @@
   integrity sha512-BoEX1pSrKn5dP4VQwaf8DweAmT4ynmpW+9f6oj/W1xLe54bmuXcUY07ziuZX1DLu50xHSYcO5qJ/dbYC/w6wgA==
 
 "@ionic/react-router@^6.5.0":
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/@ionic/react-router/-/react-router-6.5.1.tgz#35312998fbcc8b2aea0e8791d78e93897dcd42fb"
-  integrity sha512-y0FjyEgk53gGUkeCE1+ucTdbiIlmNnIKuUp0Iw6Nw92bjwzWkzx0ntdxolJGPn5ErsnNzdhGJ043RsL6RHkl8Q==
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/@ionic/react-router/-/react-router-6.5.2.tgz#5d8227533f8736333e08f4ce39959d4fec5e452a"
+  integrity sha512-mCPb8P7LpduFjl1+I/dYM4GTvb+TacXQzJM3U1CXzcJiMIjr+0fgKI1b5tEzQSYnhDpvxQt2cqnK27XmW07fyg==
   dependencies:
-    "@ionic/react" "6.5.1"
+    "@ionic/react" "6.5.2"
     tslib "*"
 
-"@ionic/react@6.5.1", "@ionic/react@^6.5.0":
-  version "6.5.1"
-  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-6.5.1.tgz#4a0ff2e47c191c19c4ab8bde49298ee5597a229f"
-  integrity sha512-V9uu2M6wc3oj3h6oNU1z7p5u2V4sSILkGbej6IRcuU29fCaV/E7zLYnaxaBcI4g/oQwmCsTyjLmvON8aITuNjA==
+"@ionic/react@6.5.2", "@ionic/react@^6.5.0":
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/@ionic/react/-/react-6.5.2.tgz#d0d2ede322a2156d0604a75ccf38311826462bbe"
+  integrity sha512-hcLfXqYM3CLQ91sCAEsmAdMJq90nqoCD0sHuPVreZlg+faHZZfJjz90uM0OUX5KVc+aBEWDIGZOuZMdIkqAkaQ==
   dependencies:
-    "@ionic/core" "6.5.1"
+    "@ionic/core" "6.5.2"
     ionicons "^6.1.1"
     tslib "*"
 
@@ -3600,9 +3600,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001426, caniuse-lite@^1.0.30001449:
-  version "1.0.30001449"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001449.tgz#a8d11f6a814c75c9ce9d851dc53eb1d1dfbcd657"
-  integrity sha512-CPB+UL9XMT/Av+pJxCKGhdx+yg1hzplvFJQlJ2n68PyQGMz9L/E2zCyLdOL8uasbouTUgnPl+y0tccI/se+BEw==
+  version "1.0.30001450"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001450.tgz#022225b91200589196b814b51b1bbe45144cf74f"
+  integrity sha512-qMBmvmQmFXaSxexkjjfMvD5rnDL0+m+dUMZKoDYsGG8iZN29RuYh9eRoMvKsT6uMAWlyUUGDEQGJJYjzCIO9ew==
 
 capital-case@^1.0.4:
   version "1.0.4"

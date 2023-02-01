@@ -38,6 +38,10 @@ Amplify.configure({
 import { translations } from '@aws-amplify/ui-react';
 I18n.putVocabularies(translations);
 I18n.setLanguage('pt');
+I18n.putVocabulariesForLanguage('pt', {
+  'Sign In': 'Login',
+  'User does not exist.': 'Error with your user',
+});
 
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css'; 
@@ -67,6 +71,8 @@ import '@/styles/globals.css';
 import '@/styles/variables.css';
 
 import 'tailwindcss/tailwind.css';
+
+
 
 import { useEffect } from 'react';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
