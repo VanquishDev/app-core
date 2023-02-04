@@ -13,7 +13,7 @@ import {
 import { calendar, personCircle, map, informationCircle } from 'ionicons/icons';
 
 export const TabsBar: React.FC = () => (
-  <div className='h-16'>
+  <div style={{ height: 55 }} className="opacity-95">
     <IonTabs>
     <IonRouterOutlet></IonRouterOutlet>
     <IonTabBar slot="bottom">

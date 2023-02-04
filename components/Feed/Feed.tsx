@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   IonApp,
   IonContent,
@@ -20,14 +20,25 @@ import {
   IonToast,
   IonPage,
   IonModal,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonList,
+  IonItem,
+  IonAvatar,
+  IonLabel,
+  IonProgressBar,
 } from '@ionic/react';
 
 import { options, search } from 'ionicons/icons';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
-import { Menu } from '../';
+import Menu from 'components/Menu';
 import SessionListFilter from './SessionListFilter';
 import TabsBar from './TabsBar';
+import { useGlobalContext } from '@/context/GlobalContext';
+import { useScreen } from '@/hooks/useScreen';
+
+import ItemVideo from './Card/ItemVideo';
 
 window
   .matchMedia('(prefers-color-scheme: dark)')
@@ -44,13 +55,17 @@ const App: React.FC = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [segment, setSegment] = useState('all');
   const [searchText, setSearchText] = useState('');
-  const [theme, setTheme] = useState('');
   const [showCompleteToast, setShowCompleteToast] = useState(true);
+  const [showLateral, setShowLateral] = useState(false);
+  const [widthL1, setWidthL1] = useState(0);
 
   const ios = getConfig()!.get('mode') === 'ios';
 
   const pageRef = useRef<HTMLElement>(null);
   const ionRefresherRef = useRef<HTMLIonRefresherElement>(null);
+
+  const { theme } = useGlobalContext();
+  const { screenWidth } = useScreen();
 
   const doRefresh = () => {
     setTimeout(() => {
@@ -59,14 +74,64 @@ const App: React.FC = () => {
     }, 2500);
   };
 
+  const [items, setItems] = useState<string[]>([]);
+
+  const generateItems = () => {
+    const newItems = [] as any;
+    for (let i = 0; i < 50; i++) {
+      newItems.push({
+        id: 1 + items.length + i,
+        title: 'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo.',
+        description: 'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i ',
+        content: 'Mais informações bla bla bla....',
+        createdAt: new Date().toISOString(),
+        views: 0,
+        isFavorite: false,
+        hasLike: false,
+        videoProvider: 'vimeo',
+        vimeoCode: '782706827',
+        points: [
+          { time: '06:22', description: 'Pesquisa' },
+          { time: '10:54', description: 'Fluxo' },
+          { time: '18:53', description: 'Tórax' }
+        ],
+        author: {
+          name: 'Luiz Pecci Neto',
+          description: 'Radiologista'
+        },
+        tags: [
+          { id: '1', name: 'Clássicos Típicos' },
+          { id: '2', name: 'Ressonância Magnética' },
+          { id: '3', name: 'Medicina Esportiva' }
+        ],
+        comments: [
+          { id: '1', content: 'bla bla bla' }
+        ],
+      });
+    }
+    setItems([...items, ...newItems]);
+  };
+
+  useEffect(() => {
+    generateItems();
+    setShowLateral(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const l1 = screenWidth - (300 + 720);
+    setWidthL1(l1 < 300 ? l1 : 300);
+  }, [screenWidth]);
+
   return (
-    <IonApp className={`${theme === 'dark' ? 'dark-theme' : ''}`}>
+    <IonApp>
       <IonSplitPane when="lg" contentId="main">
-        <Menu theme={theme} setTheme={setTheme} />
+        <Menu />
 
         <IonPage ref={pageRef} className="ion-page" id="main">
           <IonHeader translucent={true}>
-            <IonToolbar>
+            {false && <IonProgressBar type="indeterminate"></IonProgressBar>}
+            <IonToolbar className="opacity-95">
               {!showSearchbar && (
                 <IonButtons slot="start">
                   <IonMenuButton />
@@ -114,7 +179,7 @@ const App: React.FC = () => {
             </IonToolbar>
 
             {!ios && (
-              <IonToolbar>
+              <IonToolbar className="opacity-95">
                 <IonSegment
                   value={segment}
                   onIonChange={(e) => setSegment(e.detail.value as any)}
@@ -154,6 +219,26 @@ const App: React.FC = () => {
               duration={2000}
               onDidDismiss={() => setShowCompleteToast(false)}
             />
+
+            <IonList>
+              {items.map((item, index) => (
+                <div key={item}>
+                  <div className="flex justify-center px-4 py-2">
+                    <div style={{ maxWidth: 720 }} className="w-full">
+                      <ItemVideo item={item} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </IonList>
+            <IonInfiniteScroll
+              onIonInfinite={(ev) => {
+                generateItems();
+                setTimeout(() => ev.target.complete(), 500);
+              }}
+            >
+              <IonInfiniteScrollContent></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
           </IonContent>
 
           <IonFooter>
@@ -173,6 +258,17 @@ const App: React.FC = () => {
             />
           </IonModal>
         </IonPage>
+
+        {showLateral && screenWidth > 1220 && (
+          <div
+            className="border-l-2 p-4"
+            style={{ width: widthL1 > 0 ? widthL1 : 0, maxWidth: 300 }}
+          >
+            <div className="bg-slate-200 rounded-lg p-4">
+              Conteúdo adicional
+            </div>
+          </div>
+        )}
       </IonSplitPane>
     </IonApp>
   );

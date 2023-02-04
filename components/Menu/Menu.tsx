@@ -26,11 +26,13 @@ import {
   shieldCheckmarkOutline,
   personOutline,
   moonOutline,
+  sunnyOutline,
   schoolOutline,
   addOutline,
 } from 'ionicons/icons';
 
 import cn from 'classnames';
+import { useGlobalContext } from '@/context/GlobalContext';
 
 const routes = {
   appPages: [
@@ -58,13 +60,10 @@ interface Pages {
   routerDirection?: string;
 }
 
-interface Props {
-  theme: string;
-  setTheme: any;
-}
+interface Props {}
 
 const Menu: React.FC<Props> = (props: Props) => {
-  const { theme, setTheme } = props;
+  const { theme, setTheme } = useGlobalContext();
   function renderlistItems(list: Pages[]) {
     return list
       .filter((route) => !!route.path)
@@ -89,44 +88,44 @@ const Menu: React.FC<Props> = (props: Props) => {
   return (
     <IonMenu contentId="main" color="tertiary" style={{ maxWidth: 300 }}>
       <IonContent forceOverscroll={false} color="tertiary">
-        <div
-          className={cn({
-            'backdrop-blur-md bg-white/80': theme === 'light',
-            'backdrop-blur-md bg-black/80': theme === 'dark',
-          })}
-        >
-          <IonList lines="none" className="ion-no-padding">
-            <IonItemGroup>
-              <IonListHeader className="ion-padding-top" color="tertiary">
-                <IonLabel>Principal</IonLabel>
-              </IonListHeader>
-              {renderlistItems(routes.appPages)}
-            </IonItemGroup>
-          </IonList>
+        <IonList lines="none" className="ion-no-padding">
+          <IonItemGroup>
+            <IonListHeader className="ion-padding-top" color="tertiary">
+              <IonLabel>Principal</IonLabel>
+            </IonListHeader>
+            {renderlistItems(routes.appPages)}
+          </IonItemGroup>
+        </IonList>
 
-          <IonList lines="none" className="ion-no-padding">
-            <IonItemGroup>
-              <IonListHeader className="ion-padding-top" color="tertiary">
-                Minha Conta
-              </IonListHeader>
-              {renderlistItems(routes.accountPages)}
-            </IonItemGroup>
-          </IonList>
+        <IonList lines="none" className="ion-no-padding">
+          <IonItemGroup>
+            <IonListHeader className="ion-padding-top" color="tertiary">
+              Minha Conta
+            </IonListHeader>
+            {renderlistItems(routes.accountPages)}
+          </IonItemGroup>
+        </IonList>
 
-          <IonList lines="none" className="ion-no-padding">
-            <IonItemGroup>
-              <IonListHeader className="ion-padding-top" color="tertiary">
-                Mais
-              </IonListHeader>
-              <IonItem color="tertiary">
-                <IonIcon slot="start" icon={moonOutline}></IonIcon>
-                <IonLabel>Dark Mode</IonLabel>
-                <IonToggle checked={false} onClick={() => {}} />
-              </IonItem>
-              {renderlistItems(routes.morePages)}
-            </IonItemGroup>
-          </IonList>
-        </div>
+        <IonList lines="none" className="ion-no-padding">
+          <IonItemGroup>
+            <IonListHeader className="ion-padding-top" color="tertiary">
+              Mais
+            </IonListHeader>
+            <IonItem color="tertiary">
+              <IonIcon
+                slot="start"
+                icon={theme === 'dark' ? moonOutline : sunnyOutline}
+              ></IonIcon>
+              {theme === 'light' && <IonLabel>Modo claro</IonLabel>}
+              {theme === 'dark' && <IonLabel>Modo escuro</IonLabel>}
+              <IonToggle
+                checked={theme === 'dark' ? true : false}
+                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              />
+            </IonItem>
+            {renderlistItems(routes.morePages)}
+          </IonItemGroup>
+        </IonList>
       </IonContent>
     </IonMenu>
   );
