@@ -32,9 +32,8 @@ import {
 import { options, search } from 'ionicons/icons';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
-import Menu from 'components/Menu';
 import SessionListFilter from './SessionListFilter';
-import TabsBar from './TabsBar';
+import { TabsBar, Menu } from '@/components/ui';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useScreen } from '@/hooks/useScreen';
 
@@ -241,7 +240,7 @@ const App: React.FC = () => {
             </IonInfiniteScroll>
           </IonContent>
 
-          <IonFooter>
+          <IonFooter className='ion-hide-md-up'>
             <TabsBar />
           </IonFooter>
 
@@ -261,10 +260,10 @@ const App: React.FC = () => {
 
         {showLateral && screenWidth > 1220 && (
           <div
-            className="border-l-2 p-4"
+            className="border-l-2 px-2 py-4"
             style={{ width: widthL1 > 0 ? widthL1 : 0, maxWidth: 300 }}
           >
-            <div className="bg-slate-200 rounded-lg p-4">
+            <div className="bg-teal-100 rounded-lg p-4 text-sm text-slate-500">
               Conteúdo adicional
             </div>
           </div>

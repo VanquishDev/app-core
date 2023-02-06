@@ -104,7 +104,7 @@ export default function Video(props: any) {
       {tags && (
         <div className="px-2">
           {tags.map((t: any, i: number) => (
-            <IonChip key={i} color="tertiary">
+            <IonChip key={i} color="primary">
               {t.name}
             </IonChip>
           ))}
