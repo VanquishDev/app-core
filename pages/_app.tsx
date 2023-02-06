@@ -31,6 +31,10 @@ Amplify.configure({
   aws_cognito_verification_mechanisms: ['email'],
   aws_user_files_s3_bucket: `${process.env.bucketName}`,
   aws_user_files_s3_bucket_region: `${process.env.bucketRegion}`,
+  aws_appsync_graphqlEndpoint: `${process.env.graphqlURL}`,
+  aws_appsync_region: `${process.env.region}`,
+  aws_appsync_authenticationType: 'API_KEY',
+  aws_appsync_apiKey: `${process.env.graphqlApiKey}`
 });
 
 import { translations } from '@aws-amplify/ui-react';
