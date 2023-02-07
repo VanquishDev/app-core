@@ -10,6 +10,12 @@ import {
   IonTitle,
   IonButtons,
   IonMenuButton,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonTextarea,
+  IonListHeader,
 } from '@ionic/react';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
@@ -46,11 +52,36 @@ const App: React.FC = () => {
               <IonButtons slot="start">
                 <IonMenuButton />
               </IonButtons>
-              <IonTitle>Adicionar</IonTitle>
+              <IonTitle>Novo caso</IonTitle>
             </IonToolbar>
           </IonHeader>
 
-          <IonContent fullscreen={true} className="ion-padding"></IonContent>
+          <IonContent fullscreen={true} className="ion-padding">
+            <IonList>
+              <IonListHeader lines="full">
+                <IonLabel>Entre com os dados do caso.</IonLabel>
+              </IonListHeader>
+              <IonItem className="border-none">
+                <IonLabel position="floating">Título</IonLabel>
+                <IonInput placeholder=""></IonInput>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="floating">Descrição</IonLabel>
+                <IonTextarea placeholder="Enter text"></IonTextarea>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="floating">Mais informações</IonLabel>
+                <IonTextarea placeholder=""></IonTextarea>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel position="floating">Tags</IonLabel>
+                <IonInput placeholder=""></IonInput>
+              </IonItem>
+            </IonList>
+          </IonContent>
 
           <IonFooter className="ion-hide-md-up">
             <TabsBar />
