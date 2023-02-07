@@ -80,6 +80,11 @@ const App: React.FC = () => {
                 <IonLabel position="floating">Tags</IonLabel>
                 <IonInput placeholder=""></IonInput>
               </IonItem>
+
+              <IonItem>
+                <IonLabel position="floating">Vimeo Code</IonLabel>
+                <IonInput placeholder=""></IonInput>
+              </IonItem>
             </IonList>
           </IonContent>
 

@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import { useAuthenticator, Authenticator, CheckboxField } from '@aws-amplify/ui-react';
 
 import {
   withAuthenticator,
@@ -26,6 +27,44 @@ export default withAuthenticator(App, {
   loginMechanisms: ['username', 'email', 'phone_number'],
   signUpAttributes: ['name', 'email', 'phone_number'],
   socialProviders: [], // 'amazon', 'apple', 'facebook', 'google'
+  variation: 'modal',
+  components: {
+    Header() {
+      return (
+        <div className="text-center pb-8 text-4xl font-extrabold text-white">LOGO</div>
+      );
+    },
+    SignUp: {
+      FormFields() {
+        const { validationErrors } = useAuthenticator();
+
+        return (
+          <>
+            {/* Re-use default `Authenticator.SignUp.FormFields` */}
+            <Authenticator.SignUp.FormFields />
+
+            {/* Append & require Terms & Conditions field to sign up  */}
+            <CheckboxField
+              errorMessage={validationErrors.acknowledgement as string}
+              hasError={!!validationErrors.acknowledgement}
+              name="acknowledgement"
+              value="yes"
+              label="Eu concordo com os termos e politicas."
+            />
+          </>
+        );
+      },
+    }
+  },
+  services: {
+    async validateCustomSignUp(formData) {
+      if (!formData.acknowledgement) {
+        return {
+          acknowledgement: 'Você deve concordar com os termos e politicas.',
+        };
+      }
+    },
+  }
 });
 
 export async function getStaticProps() {

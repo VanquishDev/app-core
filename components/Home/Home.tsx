@@ -80,8 +80,10 @@ const App: React.FC = () => {
     for (let i = 0; i < 50; i++) {
       newItems.push({
         id: 1 + items.length + i,
-        title: 'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo.',
-        description: 'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i ',
+        title:
+          'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo.',
+        description:
+          'RM QUADRIL - Fratura Patológica X Traumática - O valor do controle evolutivo jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i jsdhfkjsdb fksdjfb sdhf bsdjhfv jsdv fksj dsjf sdkfsjd fskd i ',
         content: 'Mais informações bla bla bla....',
         createdAt: new Date().toISOString(),
         views: 0,
@@ -92,20 +94,18 @@ const App: React.FC = () => {
         points: [
           { time: '06:22', description: 'Pesquisa' },
           { time: '10:54', description: 'Fluxo' },
-          { time: '18:53', description: 'Tórax' }
+          { time: '18:53', description: 'Tórax' },
         ],
         author: {
           name: 'Luiz Pecci Neto',
-          description: 'Radiologista'
+          description: 'Radiologista',
         },
         tags: [
           { id: '1', name: 'Clássicos Típicos' },
           { id: '2', name: 'Ressonância Magnética' },
-          { id: '3', name: 'Medicina Esportiva' }
+          { id: '3', name: 'Medicina Esportiva' },
         ],
-        comments: [
-          { id: '1', content: 'bla bla bla' }
-        ],
+        comments: [{ id: '1', content: 'bla bla bla' }],
       });
     }
     setItems([...items, ...newItems]);
@@ -190,10 +190,7 @@ const App: React.FC = () => {
                 </IonSegment>
               </IonToolbar>
             )}
-          </IonHeader>
-
-          <IonContent fullscreen={true}>
-            <IonHeader collapse="condense">
+            {ios && (
               <IonToolbar>
                 <IonSearchbar
                   placeholder="Pesquisar por título, radiologista, id ou acesso."
@@ -202,8 +199,10 @@ const App: React.FC = () => {
                   }
                 ></IonSearchbar>
               </IonToolbar>
-            </IonHeader>
+            )}
+          </IonHeader>
 
+          <IonContent fullscreen={true}>
             <IonRefresher
               slot="fixed"
               ref={ionRefresherRef}
@@ -240,7 +239,7 @@ const App: React.FC = () => {
             </IonInfiniteScroll>
           </IonContent>
 
-          <IonFooter className='ion-hide-md-up'>
+          <IonFooter className="ion-hide-md-up">
             <TabsBar />
           </IonFooter>
 

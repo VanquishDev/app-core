@@ -34,19 +34,38 @@ Amplify.configure({
   aws_appsync_graphqlEndpoint: `${process.env.graphqlURL}`,
   aws_appsync_region: `${process.env.region}`,
   aws_appsync_authenticationType: 'API_KEY',
-  aws_appsync_apiKey: `${process.env.graphqlApiKey}`
+  aws_appsync_apiKey: `${process.env.graphqlApiKey}`,
 });
 
 import { translations } from '@aws-amplify/ui-react';
 I18n.putVocabularies(translations);
 I18n.setLanguage('pt');
 I18n.putVocabulariesForLanguage('pt', {
-  'Sign In': 'Login',
-  'User does not exist.': 'Error with your user',
+  'Sign In': 'Login', // Tab header
+  'Sign in': 'Entrar', // Button label
+  'Sign in to your account': 'Bem vindo de volta!',
+  Username: 'Nome de usuário', 
+  Password: 'Senha', 
+  'Forgot your password?': 'Recuperar Senha',
+  'Create Account': 'Cadastre-se', 
+  'Create a new account': 'New User',
+  'Enter your Username': 'Crie um nome de usuário', 
+  'Enter your Email': 'informe seu email', 
+  'Enter your Phone Number': 'informe seu celular', 
+  'Enter your Password': 'Crie uma senha', 
+  'Confirm Password': 'Confirme a senha',
+  'Please confirm your Password': 'Repita a senha',
+  Email: 'Email',
+  'Phone Number': 'Celular',
+  'Name': 'Nome completo',
+  'Enter your Name': 'Informe seu nome',
+  'Reset your password': 'Esqueceu a senha?',
+  'Enter your username': 'Username or Email',
+  'Send code': 'Recuperar senha',
+  'Back to Sign In': 'Voltar p/ Login',
 });
 
 import { Authenticator } from '@aws-amplify/ui-react';
-import '@aws-amplify/ui-react/styles.css';
 
 import { setupIonicReact } from '@ionic/react';
 
@@ -73,6 +92,7 @@ import '@/styles/globals.css';
 import '@/styles/variables.css';
 
 import 'tailwindcss/tailwind.css';
+import '@aws-amplify/ui-react/styles.css';
 
 import { useEffect } from 'react';
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
