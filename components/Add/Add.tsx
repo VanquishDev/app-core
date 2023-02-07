@@ -16,7 +16,11 @@ import {
   IonInput,
   IonTextarea,
   IonListHeader,
+  IonButton,
+  IonIcon,
 } from '@ionic/react';
+
+import { star, arrowForward } from 'ionicons/icons';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { TabsBar, Menu } from '@/components/ui';
@@ -86,6 +90,12 @@ const App: React.FC = () => {
                 <IonInput placeholder=""></IonInput>
               </IonItem>
             </IonList>
+
+
+            <IonButton color="primary">
+              <IonIcon slot="end" icon={arrowForward}></IonIcon>
+              Continuar
+            </IonButton>
           </IonContent>
 
           <IonFooter className="ion-hide-md-up">

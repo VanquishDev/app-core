@@ -8,8 +8,11 @@ export default function AppSignOut() {
   const router = useRouter()
 
   useEffect(()=>{
-    signOut()
-    router.push(`https://${process.env.domain}/`)
+    const getSignOut = async () => {
+      await signOut()
+      router.push(`https://${process.env.domain}`)
+    }
+    getSignOut()
   },[router, signOut])
 
   return (

@@ -9,7 +9,7 @@ const nextConfig = {
     'ionicons'
   ],
   env: {
-    domain: `${process.env.branchName}.d2jdj4wnytwo62.amplifyapp.com`,
+    domain: `${process.env.domain}`, //`${process.env.branchName}.d2jdj4wnytwo62.amplifyapp.com`,
     stackCodeName: process.env.stackCodeName,
     branchName: process.env.branchName,
     region: process.env.region,

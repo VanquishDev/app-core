@@ -14,6 +14,7 @@ import {
   IonTitle,
   IonItemGroup,
   IonFooter,
+  IonAvatar,
 } from '@ionic/react';
 
 import {
@@ -29,6 +30,7 @@ import {
   sunnyOutline,
   schoolOutline,
   addOutline,
+  sparklesOutline,
 } from 'ionicons/icons';
 
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -49,6 +51,7 @@ const routes = {
     { title: 'Tutorial', path: '/tutorial', icon: albumsOutline },
     { title: 'Termos de uso', path: '/terms', icon: documentTextOutline },
     { title: 'Privacidade', path: '/privacy', icon: documentLockOutline },
+    { title: 'Admin', path: '/admin', icon: sparklesOutline },
   ],
 };
 
@@ -90,7 +93,22 @@ const Menu: React.FC<Props> = (props: Props) => {
     <IonMenu contentId="main" color="primary" style={{ maxWidth: 300 }}>
       <IonContent forceOverscroll={false} color="primary">
         <div className="px-4 pt-4 text-3xl font-extrabold">LOGO</div>
-
+        {user && (
+          <div className="pt-5 px-4 flex flex-start gap-2 items-center">
+            <div>
+              <IonAvatar slot="start" style={{ height: 40, width: 40 }}>
+                <img
+                  src={'https://picsum.photos/40/40?random='}
+                  alt="avatar"
+                />
+              </IonAvatar>
+            </div>
+            <div>
+              <div className="text-lg font-bold">{user?.attributes?.name}</div>
+              <div className="text-xs">Admin</div>
+            </div>
+          </div>
+        )}
         <IonList lines="none" className="ion-no-padding">
           <IonItemGroup>
             <IonListHeader className="ion-padding-top" color="primary">
@@ -101,13 +119,13 @@ const Menu: React.FC<Props> = (props: Props) => {
         </IonList>
 
         <IonList lines="none" className="ion-no-padding">
-            <IonItemGroup>
-              <IonListHeader className="ion-padding-top" color="primary">
-                Minha Conta
-              </IonListHeader>
-              {renderlistItems(routes.accountPages)}
-            </IonItemGroup>
-          </IonList>
+          <IonItemGroup>
+            <IonListHeader className="ion-padding-top" color="primary">
+              Minha Conta
+            </IonListHeader>
+            {renderlistItems(routes.accountPages)}
+          </IonItemGroup>
+        </IonList>
 
         <IonList lines="none" className="ion-no-padding">
           <IonItemGroup>
@@ -128,16 +146,18 @@ const Menu: React.FC<Props> = (props: Props) => {
             </IonItem>
             {renderlistItems(routes.morePages)}
 
-            {user && <IonItem
-              key="/signOut"
-              color="primary"
-              detail={false}
-              routerLink="/signOut"
-              routerDirection="none"
-            >
-              <IonIcon slot="start" icon={exitOutline} />
-              <div className="text-lg font-medium">Desconectar</div>
-            </IonItem>}
+            {user && (
+              <IonItem
+                key="/signOut"
+                color="primary"
+                detail={false}
+                routerLink="/signOut"
+                routerDirection="none"
+              >
+                <IonIcon slot="start" icon={exitOutline} />
+                <div className="text-lg font-medium">Desconectar</div>
+              </IonItem>
+            )}
           </IonItemGroup>
         </IonList>
       </IonContent>
