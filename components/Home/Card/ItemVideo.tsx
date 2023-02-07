@@ -1,3 +1,4 @@
+import Vimeo from '@u-wave/react-vimeo';
 import { useState } from 'react';
 import cn from 'classnames';
 import {
@@ -75,16 +76,14 @@ export default function Video(props: any) {
         </div>
       )}
 
-      <div className="mt-4">
-        <iframe
-          width={720}
-          height={720 * 0.44}
-          src={`https://player.vimeo.com/video/${vimeoCode}`}
-          frameBorder="0"
-          allow="autoplay; fullscreen; picture-in-picture"
-          allowFullScreen
-        ></iframe>
-      </div>
+      <Vimeo
+        className="mt-4 w-full"
+        video={vimeoCode}
+        color="#14b8a6"
+        responsive={true}
+        showPortrait={false}
+        showTitle={false}
+      />
 
       <div className="px-4 pt-4 pb-2 w-full flex justify-between items-start">
         <div>

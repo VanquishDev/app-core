@@ -64,6 +64,29 @@ export default withAuthenticator(App, {
         };
       }
     },
+  },
+  formFields: {
+    signUp: {
+      name: {
+        order: 1
+      },
+      username: {
+        order: 2
+      },
+      email: {
+        order:3
+      },
+      phone_number: {
+        order:4,
+        dialCode: '+55'
+      },
+      password: {
+        order: 5
+      },
+      confirm_password: {
+        order: 6
+      }
+    },
   }
 });
 

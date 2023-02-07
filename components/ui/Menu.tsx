@@ -91,8 +91,6 @@ const Menu: React.FC<Props> = (props: Props) => {
       <IonContent forceOverscroll={false} color="primary">
         <div className="px-4 pt-4 text-3xl font-extrabold">LOGO</div>
 
-        <div>{JSON.stringify(user, null, 4)}</div>
-
         <IonList lines="none" className="ion-no-padding">
           <IonItemGroup>
             <IonListHeader className="ion-padding-top" color="primary">

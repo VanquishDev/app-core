@@ -11,7 +11,7 @@ export const GlobalContext = createContext<IGlobalContextProps>({
 });
 
 export const GlobalContextProvider = (props: any) => {
-  const [theme, setTheme] = useState('');
+  const [theme, setTheme] = useState('light');
 
   return (
     <GlobalContext.Provider
