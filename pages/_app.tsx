@@ -63,6 +63,8 @@ I18n.putVocabulariesForLanguage('pt', {
   'Enter your username': 'Username or Email',
   'Send code': 'Recuperar senha',
   'Back to Sign In': 'Voltar p/ Login',
+  'Drop files here or': 'Solte os arquivos aqui ou',
+  'Browse files': 'Selecionar'
 });
 
 import { Authenticator } from '@aws-amplify/ui-react';

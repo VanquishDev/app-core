@@ -1,3 +1,4 @@
+import { FileUploader } from '@aws-amplify/ui-react';
 import React, { useEffect, useState, useRef } from 'react';
 import {
   IonApp,
@@ -41,6 +42,16 @@ window
 const App: React.FC = () => {
   const { theme } = useGlobalContext();
   const { isXs, isSm } = useBreakPoints();
+
+  const [message, setMessage] = React.useState('');
+  
+  const onSuccess = ({ key }: any) => {
+    setMessage(`Key: ${key}`);
+  };
+
+  const onError = (error: any) => {
+    setMessage(`${error}`);
+  };
 
   return (
     <IonApp>
@@ -91,6 +102,18 @@ const App: React.FC = () => {
               </IonItem>
             </IonList>
 
+            <div className="py-4">
+              <FileUploader
+                variation="drop"
+                acceptedFileTypes={['video/*']}
+                accessLevel="private"
+                isPreviewerVisible={true}
+                maxFiles={1}
+                hasMultipleFiles={false}
+                onSuccess={onSuccess}
+                onError={onError}
+              />
+            </div>
 
             <IonButton color="primary">
               <IonIcon slot="end" icon={arrowForward}></IonIcon>
