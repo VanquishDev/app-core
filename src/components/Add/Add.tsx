@@ -108,7 +108,6 @@ const App: React.FC = () => {
                 acceptedFileTypes={['video/*']}
                 accessLevel="private"
                 isPreviewerVisible={true}
-                maxFiles={1}
                 hasMultipleFiles={false}
                 onSuccess={onSuccess}
                 onError={onError}

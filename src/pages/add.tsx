@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const App = dynamic(() => import('components/Tutorial'), {
+const App = dynamic(() => import('@/components/Add'), {
   ssr: false,
 });
 

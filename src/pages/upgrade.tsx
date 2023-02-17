@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-const App = dynamic(() => import('components/Upgrade'), {
+const App = dynamic(() => import('@/components/Upgrade'), {
   ssr: false,
 });
 

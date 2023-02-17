@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 
 import { StatusBar, Style } from '@capacitor/status-bar';
-import { useGlobalContext } from 'context/GlobalContext';
+import { useGlobalContext } from '@/context/GlobalContext';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useBreakPoints } from '@/hooks/useBreakPoints';
 
