@@ -1,9 +1,9 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "appCoreIdentityPoll",
+    "identityPoolName": "appCoreIdentityPool",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "appcorff3975bb",
+    "resourceNameTruncated": "appcor9f757518",
     "userPoolName": "appCoreUserPool",
     "autoVerifiedAttributes": [
       "email"
@@ -31,9 +31,9 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "appCorff3975bb_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "appCor9f757518_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "ff3975bb",
+    "sharedId": "9f757518",
     "resourceName": "appCoreAuth",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
@@ -50,6 +50,25 @@
     ],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "useEnabledMfas": true
+    "useEnabledMfas": true,
+    "authRoleArn": {
+      "Fn::GetAtt": [
+        "AuthRole",
+        "Arn"
+      ]
+    },
+    "unauthRoleArn": {
+      "Fn::GetAtt": [
+        "UnauthRole",
+        "Arn"
+      ]
+    },
+    "breakCircularDependency": true,
+    "dependsOn": [],
+    "authProviders": [],
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "permissions": []
   }
 }

@@ -19,6 +19,7 @@
     "amplify:export": "amplify export --out ../cdk-stack/lib"
   },
   "dependencies": {
+    "@aws-amplify/cli": "^11.0.0-beta.6",
     "@aws-amplify/ui-react": "^4.3.6",
     "@capacitor/android": "^4.6.2",
     "@capacitor/core": "^4.6.2",
