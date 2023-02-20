@@ -2,7 +2,7 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "AppCoreApp",
+  "projectName": "AppCoreStaging",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
