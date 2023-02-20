@@ -11,3 +11,5 @@ https://ui.docs.amplify.aws/react/connected-components/authenticator/customizati
 https://aws.amazon.com/pt/blogs/mobile/extend-amplify-backend-with-custom-aws-resource-using-aws-cdk-or-cloudformation/
 
 https://aws.amazon.com/pt/blogs/mobile/use-aws-cdk-v2-with-the-aws-amplify-cli-extensibility-features-beta/
+
+cd 

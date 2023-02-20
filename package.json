@@ -16,10 +16,9 @@
     "ionic:serve": "npm run start",
     "clean": "rimraf node_modules; rimraf .next; rm -f yarn-error.log; rm -f yarn.lock",
     "clean:next": "rimraf .next;",
-    "amplify:export": "amplify export --out ../cdk-stack/lib"
+    "amplify:export": "amplify export --out ../../Dev/cdk-amplify-exported/lib"
   },
   "dependencies": {
-    "@aws-amplify/cli": "^11.0.0-beta.6",
     "@aws-amplify/ui-react": "^4.3.6",
     "@capacitor/android": "^4.6.2",
     "@capacitor/core": "^4.6.2",
@@ -47,10 +46,13 @@
     "typescript": "4.9.5"
   },
   "devDependencies": {
+    "@aws-amplify/cli": "^11.0.0-beta.6",
+    "@aws-amplify/cli-extensibility-helper": "^3.0.0-beta.7",
     "@capacitor/cli": "^4.6.2",
     "autoprefixer": "^10.4.13",
     "eslint": "^8.34.0",
     "eslint-config-next": "^13.1.6",
+    "inquirer": "^9.1.4",
     "ionicons": "^6.1.1",
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
