@@ -3568,7 +3568,7 @@ export type ListConfigQueryVariables = {
 };
 
 export type ListConfigQuery = {
-  ListConfig?:  {
+  listConfig?:  {
     __typename: "ModelConfigConnection",
     items:  Array< {
       __typename: "Config",
@@ -4197,7 +4197,7 @@ export type ListLogsByUserCreatedAtQuery = {
   } | null,
 };
 
-export type ListMidiaByKeyQueryVariables = {
+export type ListMidiasByKeyQueryVariables = {
   key: string,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelMidiaFilterInput | null,
@@ -4205,8 +4205,8 @@ export type ListMidiaByKeyQueryVariables = {
   nextToken?: string | null,
 };
 
-export type ListMidiaByKeyQuery = {
-  listMidiaByKey?:  {
+export type ListMidiasByKeyQuery = {
+  listMidiasByKey?:  {
     __typename: "ModelMidiaConnection",
     items:  Array< {
       __typename: "Midia",
@@ -4225,7 +4225,7 @@ export type ListMidiaByKeyQuery = {
   } | null,
 };
 
-export type NotifyByUserCreatedAtQueryVariables = {
+export type ListNotifyByUserCreatedAtQueryVariables = {
   userID: string,
   createdAt?: ModelStringKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
@@ -4234,8 +4234,8 @@ export type NotifyByUserCreatedAtQueryVariables = {
   nextToken?: string | null,
 };
 
-export type NotifyByUserCreatedAtQuery = {
-  notifyByUserCreatedAt?:  {
+export type ListNotifyByUserCreatedAtQuery = {
+  listNotifyByUserCreatedAt?:  {
     __typename: "ModelNotifyConnection",
     items:  Array< {
       __typename: "Notify",

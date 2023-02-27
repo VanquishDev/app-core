@@ -222,7 +222,7 @@ export const listConfig = /* GraphQL */ `
     $nextToken: String
     $sortDirection: ModelSortDirection
   ) {
-    ListConfig(
+    listConfig(
       id: $id
       filter: $filter
       limit: $limit
@@ -877,15 +877,15 @@ export const listLogsByUserCreatedAt = /* GraphQL */ `
     }
   }
 `;
-export const listMidiaByKey = /* GraphQL */ `
-  query ListMidiaByKey(
+export const listMidiasByKey = /* GraphQL */ `
+  query ListMidiasByKey(
     $key: String!
     $sortDirection: ModelSortDirection
     $filter: ModelMidiaFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listMidiaByKey(
+    listMidiasByKey(
       key: $key
       sortDirection: $sortDirection
       filter: $filter
@@ -908,8 +908,8 @@ export const listMidiaByKey = /* GraphQL */ `
     }
   }
 `;
-export const notifyByUserCreatedAt = /* GraphQL */ `
-  query NotifyByUserCreatedAt(
+export const listNotifyByUserCreatedAt = /* GraphQL */ `
+  query ListNotifyByUserCreatedAt(
     $userID: ID!
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
@@ -917,7 +917,7 @@ export const notifyByUserCreatedAt = /* GraphQL */ `
     $limit: Int
     $nextToken: String
   ) {
-    notifyByUserCreatedAt(
+    listNotifyByUserCreatedAt(
       userID: $userID
       createdAt: $createdAt
       sortDirection: $sortDirection

@@ -256,7 +256,7 @@ type Log
 type Config
   @model(
     mutations: { create: "createConfig", update: "updateConfig", delete: null }
-    queries: { get: null, list: "ListConfig" }
+    queries: { get: null, list: "listConfig" }
     subscriptions: null
   )
   @auth(rules: [{ allow: public, provider: apiKey }]) {
@@ -295,7 +295,7 @@ type Midia
   )
   @auth(rules: [{ allow: public, provider: apiKey }]) {
   id: ID! @primaryKey
-  key: String! @index(name: "MidiaByKey", queryField: "listMidiaByKey")
+  key: String! @index(name: "MidiaByKey", queryField: "listMidiasByKey")
   type: MidiaTypes
   title: String
   subTitle: String
@@ -315,7 +315,7 @@ type Notify
   userID: ID!
     @index(
       name: "notifyByUserCreatedAt"
-      queryField: "notifyByUserCreatedAt"
+      queryField: "listNotifyByUserCreatedAt"
       sortKeyFields: ["createdAt"]
     )
   content: String
