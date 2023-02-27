@@ -10,7 +10,7 @@ interface Props extends WithAuthenticatorProps {
   isPassedToWithAuthenticator: boolean;
 }
 
-const App = dynamic(() => import('@/components/Admin'), {
+const App = dynamic(() => import('@/components/Home'), {
   ssr: false,
 });
 

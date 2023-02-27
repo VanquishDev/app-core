@@ -48,11 +48,11 @@ export default function Video(props: any) {
 
   return (
     <div className="shadow select-none">
-      <div className="px-4 flex flex-start gap-2 items-center">
+      <div className="p-4 flex flex-start gap-2 items-center">
         <div>
           <IonAvatar slot="start">
             <img
-              src={'https://picsum.photos/80/80?random=' + id}
+              src={'/avatar/user.png'}
               alt="avatar"
             />
           </IonAvatar>

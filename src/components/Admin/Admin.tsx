@@ -35,6 +35,9 @@ const App = () => {
   const { user, signOut } = useAuthenticator((context) => [context.user]);
   const { isXs, isSm } = useBreakPoints();
 
+  const { signInUserSession } = user as any
+  const groups = signInUserSession.accessToken.payload['cognito:groups']
+
   return (
     <IonApp>
       <IonSplitPane when="lg" contentId="main">
@@ -82,14 +85,11 @@ const App = () => {
               {JSON.stringify(user.attributes, null, 4)}
             </pre>
 
-            <div className="mt-6 text-xl font-bold">Cognito User</div>
+            <div className="mt-6 text-xl font-bold">Grupo</div>
             <pre className="mt-2 bg-slate-100 rounded-lg p-4">
-              {JSON.stringify({ user }, null, 4)}
+              {JSON.stringify(groups, null, 4)}
             </pre>
 
-            <button className="btn" onClick={signOut}>
-              Sign Out
-            </button>
           </IonContent>
 
           <IonFooter className="ion-hide-md-up">
