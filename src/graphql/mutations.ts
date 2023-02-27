@@ -52,7 +52,16 @@ export const createUser = /* GraphQL */ `
           id
           group
           userID
-          profileID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tags {
+        items {
+          id
+          tagID
+          userID
           createdAt
           updatedAt
         }
@@ -62,7 +71,6 @@ export const createUser = /* GraphQL */ `
         items {
           id
           userID
-          source
           title
           description
           manufacturer
@@ -80,6 +88,33 @@ export const createUser = /* GraphQL */ `
           lng
           createdAt
           isError
+          updatedAt
+        }
+        nextToken
+      }
+      posts {
+        items {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
           updatedAt
         }
         nextToken
@@ -138,7 +173,16 @@ export const updateUser = /* GraphQL */ `
           id
           group
           userID
-          profileID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tags {
+        items {
+          id
+          tagID
+          userID
           createdAt
           updatedAt
         }
@@ -148,7 +192,6 @@ export const updateUser = /* GraphQL */ `
         items {
           id
           userID
-          source
           title
           description
           manufacturer
@@ -166,6 +209,33 @@ export const updateUser = /* GraphQL */ `
           lng
           createdAt
           isError
+          updatedAt
+        }
+        nextToken
+      }
+      posts {
+        items {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
           updatedAt
         }
         nextToken
@@ -224,7 +294,16 @@ export const deleteUser = /* GraphQL */ `
           id
           group
           userID
-          profileID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tags {
+        items {
+          id
+          tagID
+          userID
           createdAt
           updatedAt
         }
@@ -234,7 +313,6 @@ export const deleteUser = /* GraphQL */ `
         items {
           id
           userID
-          source
           title
           description
           manufacturer
@@ -252,6 +330,33 @@ export const deleteUser = /* GraphQL */ `
           lng
           createdAt
           isError
+          updatedAt
+        }
+        nextToken
+      }
+      posts {
+        items {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
           updatedAt
         }
         nextToken
@@ -298,7 +403,16 @@ export const createProfile = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -359,7 +473,16 @@ export const updateProfile = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -420,7 +543,16 @@ export const deleteProfile = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -443,12 +575,12 @@ export const deleteProfile = /* GraphQL */ `
     }
   }
 `;
-export const createGroupUser = /* GraphQL */ `
-  mutation CreateGroupUser(
-    $input: CreateGroupUserInput!
-    $condition: ModelGroupUserConditionInput
+export const createUserGroup = /* GraphQL */ `
+  mutation CreateUserGroup(
+    $input: CreateUserGroupInput!
+    $condition: ModelUserGroupConditionInput
   ) {
-    createGroupUser(input: $input, condition: $condition) {
+    createUserGroup(input: $input, condition: $condition) {
       id
       group
       userID
@@ -483,40 +615,18 @@ export const createGroupUser = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
           nextToken
         }
-        updatedAt
-      }
-      profileID
-      profile {
-        userID
-        user {
-          id
-          name
-          email
-          phone
-          status
-          active
-          avatar
-          search
-          createdAt
-          updatedAt
+        posts {
+          nextToken
         }
-        doc
-        docType
-        docProfession
-        profession
-        specialties
-        subSpecialties
-        bio
-        gender
-        birth
-        birthDay
-        notes
-        allowCookiesPreference
-        allowCookiesStatistic
-        createdAt
+        comments {
+          nextToken
+        }
         updatedAt
       }
       createdAt
@@ -524,12 +634,12 @@ export const createGroupUser = /* GraphQL */ `
     }
   }
 `;
-export const deleteGroupUser = /* GraphQL */ `
-  mutation DeleteGroupUser(
-    $input: DeleteGroupUserInput!
-    $condition: ModelGroupUserConditionInput
+export const deleteUserGroup = /* GraphQL */ `
+  mutation DeleteUserGroup(
+    $input: DeleteUserGroupInput!
+    $condition: ModelUserGroupConditionInput
   ) {
-    deleteGroupUser(input: $input, condition: $condition) {
+    deleteUserGroup(input: $input, condition: $condition) {
       id
       group
       userID
@@ -564,42 +674,199 @@ export const deleteGroupUser = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
       }
-      profileID
-      profile {
-        userID
-        user {
-          id
-          name
-          email
-          phone
-          status
-          active
-          avatar
-          search
-          createdAt
-          updatedAt
-        }
-        doc
-        docType
-        docProfession
-        profession
-        specialties
-        subSpecialties
-        bio
-        gender
-        birth
-        birthDay
-        notes
-        allowCookiesPreference
-        allowCookiesStatistic
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUserTag = /* GraphQL */ `
+  mutation CreateUserTag(
+    $input: CreateUserTagInput!
+    $condition: ModelUserTagConditionInput
+  ) {
+    createUserTag(input: $input, condition: $condition) {
+      id
+      tagID
+      tag {
+        id
+        name
+        type
+        status
         createdAt
         updatedAt
       }
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUserTag = /* GraphQL */ `
+  mutation DeleteUserTag(
+    $input: DeleteUserTagInput!
+    $condition: ModelUserTagConditionInput
+  ) {
+    deleteUserTag(input: $input, condition: $condition) {
+      id
+      tagID
+      tag {
+        id
+        name
+        type
+        status
+        createdAt
+        updatedAt
+      }
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTag = /* GraphQL */ `
+  mutation CreateTag(
+    $input: CreateTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    createTag(input: $input, condition: $condition) {
+      id
+      name
+      type
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTag = /* GraphQL */ `
+  mutation UpdateTag(
+    $input: UpdateTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    updateTag(input: $input, condition: $condition) {
+      id
+      name
+      type
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTag = /* GraphQL */ `
+  mutation DeleteTag(
+    $input: DeleteTagInput!
+    $condition: ModelTagConditionInput
+  ) {
+    deleteTag(input: $input, condition: $condition) {
+      id
+      name
+      type
+      status
       createdAt
       updatedAt
     }
@@ -618,7 +885,7 @@ export const createAddress = /* GraphQL */ `
       street
       number
       complement
-      zipcode
+      zipCode
       neighborhood
       city
       state
@@ -642,7 +909,7 @@ export const updateAddress = /* GraphQL */ `
       street
       number
       complement
-      zipcode
+      zipCode
       neighborhood
       city
       state
@@ -666,7 +933,7 @@ export const deleteAddress = /* GraphQL */ `
       street
       number
       complement
-      zipcode
+      zipCode
       neighborhood
       city
       state
@@ -754,7 +1021,6 @@ export const createLog = /* GraphQL */ `
     createLog(input: $input, condition: $condition) {
       id
       userID
-      source
       user {
         id
         name
@@ -786,7 +1052,16 @@ export const createLog = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -827,7 +1102,7 @@ export const createConfig = /* GraphQL */ `
       youtube
       linkedin
       phoneSac
-      phoneWhatsapp
+      WhatsApp
       createdAt
       updatedAt
     }
@@ -848,7 +1123,7 @@ export const updateConfig = /* GraphQL */ `
       youtube
       linkedin
       phoneSac
-      phoneWhatsapp
+      WhatsApp
       createdAt
       updatedAt
     }
@@ -919,7 +1194,6 @@ export const createNotify = /* GraphQL */ `
     createNotify(input: $input, condition: $condition) {
       id
       userID
-      date
       content
       link
       viewed
@@ -936,10 +1210,646 @@ export const deleteNotify = /* GraphQL */ `
     deleteNotify(input: $input, condition: $condition) {
       id
       userID
-      date
       content
       link
       viewed
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createPost = /* GraphQL */ `
+  mutation CreatePost(
+    $input: CreatePostInput!
+    $condition: ModelPostConditionInput
+  ) {
+    createPost(input: $input, condition: $condition) {
+      id
+      type
+      title
+      description
+      content
+      vimeoCode
+      videoKey
+      thumbnail
+      createdAt
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      tags {
+        items {
+          id
+          postID
+          tagID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const updatePost = /* GraphQL */ `
+  mutation UpdatePost(
+    $input: UpdatePostInput!
+    $condition: ModelPostConditionInput
+  ) {
+    updatePost(input: $input, condition: $condition) {
+      id
+      type
+      title
+      description
+      content
+      vimeoCode
+      videoKey
+      thumbnail
+      createdAt
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      tags {
+        items {
+          id
+          postID
+          tagID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const deletePost = /* GraphQL */ `
+  mutation DeletePost(
+    $input: DeletePostInput!
+    $condition: ModelPostConditionInput
+  ) {
+    deletePost(input: $input, condition: $condition) {
+      id
+      type
+      title
+      description
+      content
+      vimeoCode
+      videoKey
+      thumbnail
+      createdAt
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      tags {
+        items {
+          id
+          postID
+          tagID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const createPostTag = /* GraphQL */ `
+  mutation CreatePostTag(
+    $input: CreatePostTagInput!
+    $condition: ModelPostTagConditionInput
+  ) {
+    createPostTag(input: $input, condition: $condition) {
+      id
+      postID
+      post {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      tagID
+      tag {
+        id
+        name
+        type
+        status
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deletePostTag = /* GraphQL */ `
+  mutation DeletePostTag(
+    $input: DeletePostTagInput!
+    $condition: ModelPostTagConditionInput
+  ) {
+    deletePostTag(input: $input, condition: $condition) {
+      id
+      postID
+      post {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      tagID
+      tag {
+        id
+        name
+        type
+        status
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createComment = /* GraphQL */ `
+  mutation CreateComment(
+    $input: CreateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    createComment(input: $input, condition: $condition) {
+      id
+      postID
+      post {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      content
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateComment = /* GraphQL */ `
+  mutation UpdateComment(
+    $input: UpdateCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    updateComment(input: $input, condition: $condition) {
+      id
+      postID
+      post {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      content
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteComment = /* GraphQL */ `
+  mutation DeleteComment(
+    $input: DeleteCommentInput!
+    $condition: ModelCommentConditionInput
+  ) {
+    deleteComment(input: $input, condition: $condition) {
+      id
+      postID
+      post {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      userID
+      user {
+        id
+        name
+        email
+        phone
+        status
+        active
+        avatar
+        search
+        createdAt
+        profile {
+          userID
+          doc
+          docType
+          docProfession
+          profession
+          specialties
+          subSpecialties
+          bio
+          gender
+          birth
+          birthDay
+          notes
+          allowCookiesPreference
+          allowCookiesStatistic
+          createdAt
+          updatedAt
+        }
+        groups {
+          nextToken
+        }
+        tags {
+          nextToken
+        }
+        logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      content
       createdAt
       updatedAt
     }

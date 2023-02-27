@@ -1,7 +1,7 @@
 {
   "version": 1,
   "serviceConfiguration": {
-    "apiName": "appCoreApiGraphQL",
+    "apiName": "AppCoreApi",
     "serviceName": "AppSync",
     "defaultAuthType": {
       "mode": "API_KEY",

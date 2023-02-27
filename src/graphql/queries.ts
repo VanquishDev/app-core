@@ -49,7 +49,16 @@ export const getUser = /* GraphQL */ `
           id
           group
           userID
-          profileID
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      tags {
+        items {
+          id
+          tagID
+          userID
           createdAt
           updatedAt
         }
@@ -59,7 +68,6 @@ export const getUser = /* GraphQL */ `
         items {
           id
           userID
-          source
           title
           description
           manufacturer
@@ -77,6 +85,33 @@ export const getUser = /* GraphQL */ `
           lng
           createdAt
           isError
+          updatedAt
+        }
+        nextToken
+      }
+      posts {
+        items {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        nextToken
+      }
+      comments {
+        items {
+          id
+          postID
+          userID
+          content
+          createdAt
           updatedAt
         }
         nextToken
@@ -120,7 +155,16 @@ export const getProfile = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -143,21 +187,63 @@ export const getProfile = /* GraphQL */ `
     }
   }
 `;
-export const getConfig = /* GraphQL */ `
-  query GetConfig($id: ID!) {
-    getConfig(id: $id) {
-      id
-      googleAnalyticsID
-      googleSiteVerification
-      facebook
-      twitter
-      instagram
-      youtube
-      linkedin
-      phoneSac
-      phoneWhatsapp
-      createdAt
-      updatedAt
+export const listTags = /* GraphQL */ `
+  query ListTags(
+    $id: ID
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listTags(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        name
+        type
+        status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listConfig = /* GraphQL */ `
+  query ListConfig(
+    $id: ID
+    $filter: ModelConfigFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    ListConfig(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        googleAnalyticsID
+        googleSiteVerification
+        facebook
+        twitter
+        instagram
+        youtube
+        linkedin
+        phoneSac
+        WhatsApp
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
   }
 `;
@@ -238,7 +324,16 @@ export const getUserByEmail = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -293,7 +388,16 @@ export const getUserByPhone = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -350,7 +454,16 @@ export const listUsersByStatusCreatedAt = /* GraphQL */ `
         groups {
           nextToken
         }
+        tags {
+          nextToken
+        }
         logs {
+          nextToken
+        }
+        posts {
+          nextToken
+        }
+        comments {
           nextToken
         }
         updatedAt
@@ -408,16 +521,16 @@ export const listUsersByBirthDay = /* GraphQL */ `
     }
   }
 `;
-export const listUsersByGroup = /* GraphQL */ `
-  query ListUsersByGroup(
+export const listUsersByGroupUser = /* GraphQL */ `
+  query ListUsersByGroupUser(
     $group: String!
     $userID: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelGroupUserFilterInput
+    $filter: ModelUserGroupFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUsersByGroup(
+    listUsersByGroupUser(
       group: $group
       userID: $userID
       sortDirection: $sortDirection
@@ -438,25 +551,6 @@ export const listUsersByGroup = /* GraphQL */ `
           active
           avatar
           search
-          createdAt
-          updatedAt
-        }
-        profileID
-        profile {
-          userID
-          doc
-          docType
-          docProfession
-          profession
-          specialties
-          subSpecialties
-          bio
-          gender
-          birth
-          birthDay
-          notes
-          allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -467,16 +561,16 @@ export const listUsersByGroup = /* GraphQL */ `
     }
   }
 `;
-export const listGroupsByUser = /* GraphQL */ `
-  query ListGroupsByUser(
+export const listGroupsByUserGroup = /* GraphQL */ `
+  query ListGroupsByUserGroup(
     $userID: ID!
     $group: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
-    $filter: ModelGroupUserFilterInput
+    $filter: ModelUserGroupFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listGroupsByUser(
+    listGroupsByUserGroup(
       userID: $userID
       group: $group
       sortDirection: $sortDirection
@@ -500,25 +594,156 @@ export const listGroupsByUser = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        profileID
-        profile {
-          userID
-          doc
-          docType
-          docProfession
-          profession
-          specialties
-          subSpecialties
-          bio
-          gender
-          birth
-          birthDay
-          notes
-          allowCookiesPreference
-          allowCookiesStatistic
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listUsersByTag = /* GraphQL */ `
+  query ListUsersByTag(
+    $tagID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsersByTag(
+      tagID: $tagID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tagID
+        tag {
+          id
+          name
+          type
+          status
           createdAt
           updatedAt
         }
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listTagsByUser = /* GraphQL */ `
+  query ListTagsByUser(
+    $userID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTagsByUser(
+      userID: $userID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tagID
+        tag {
+          id
+          name
+          type
+          status
+          createdAt
+          updatedAt
+        }
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listTagsByTypeName = /* GraphQL */ `
+  query ListTagsByTypeName(
+    $type: TagTypes!
+    $name: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTagsByTypeName(
+      type: $type
+      name: $name
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        type
+        status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listTagsByStatusName = /* GraphQL */ `
+  query ListTagsByStatusName(
+    $status: TagStatus!
+    $name: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTagsByStatusName(
+      status: $status
+      name: $name
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        type
+        status
         createdAt
         updatedAt
       }
@@ -549,7 +774,7 @@ export const listAddressesByUser = /* GraphQL */ `
         street
         number
         complement
-        zipcode
+        zipCode
         neighborhood
         city
         state
@@ -617,63 +842,6 @@ export const listLogsByUserCreatedAt = /* GraphQL */ `
       items {
         id
         userID
-        source
-        user {
-          id
-          name
-          email
-          phone
-          status
-          active
-          avatar
-          search
-          createdAt
-          updatedAt
-        }
-        title
-        description
-        manufacturer
-        model
-        osName
-        osVersion
-        platform
-        uuid
-        ip
-        city
-        region
-        country
-        provider
-        lat
-        lng
-        createdAt
-        isError
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const listLogsBySourceCreatedAt = /* GraphQL */ `
-  query ListLogsBySourceCreatedAt(
-    $source: LogSource!
-    $createdAt: ModelStringKeyConditionInput
-    $sortDirection: ModelSortDirection
-    $filter: ModelLogFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listLogsBySourceCreatedAt(
-      source: $source
-      createdAt: $createdAt
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        userID
-        source
         user {
           id
           name
@@ -740,18 +908,18 @@ export const listMidiaByKey = /* GraphQL */ `
     }
   }
 `;
-export const notifyByUserDate = /* GraphQL */ `
-  query NotifyByUserDate(
+export const notifyByUserCreatedAt = /* GraphQL */ `
+  query NotifyByUserCreatedAt(
     $userID: ID!
-    $date: ModelStringKeyConditionInput
+    $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelNotifyFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    notifyByUserDate(
+    notifyByUserCreatedAt(
       userID: $userID
-      date: $date
+      createdAt: $createdAt
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -760,10 +928,263 @@ export const notifyByUserDate = /* GraphQL */ `
       items {
         id
         userID
-        date
         content
         link
         viewed
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPostsByUserCreatedAt = /* GraphQL */ `
+  query ListPostsByUserCreatedAt(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostsByUserCreatedAt(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        type
+        title
+        description
+        content
+        vimeoCode
+        videoKey
+        thumbnail
+        createdAt
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        tags {
+          nextToken
+        }
+        comments {
+          nextToken
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listTagsByPost = /* GraphQL */ `
+  query ListTagsByPost(
+    $postID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTagsByPost(
+      postID: $postID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postID
+        post {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        tagID
+        tag {
+          id
+          name
+          type
+          status
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPostsByTag = /* GraphQL */ `
+  query ListPostsByTag(
+    $tagID: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostsByTag(
+      tagID: $tagID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postID
+        post {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        tagID
+        tag {
+          id
+          name
+          type
+          status
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listCommentsByPostCreatedAt = /* GraphQL */ `
+  query ListCommentsByPostCreatedAt(
+    $postID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCommentsByPostCreatedAt(
+      postID: $postID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postID
+        post {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listCommentsByUserCreatedAt = /* GraphQL */ `
+  query ListCommentsByUserCreatedAt(
+    $userID: ID!
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelCommentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listCommentsByUserCreatedAt(
+      userID: $userID
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        postID
+        post {
+          id
+          type
+          title
+          description
+          content
+          vimeoCode
+          videoKey
+          thumbnail
+          createdAt
+          userID
+          updatedAt
+        }
+        userID
+        user {
+          id
+          name
+          email
+          phone
+          status
+          active
+          avatar
+          search
+          createdAt
+          updatedAt
+        }
+        content
         createdAt
         updatedAt
       }

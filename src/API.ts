@@ -99,8 +99,11 @@ export type User = {
   search?: string | null,
   createdAt?: string | null,
   profile?: Profile | null,
-  groups?: ModelGroupUserConnection | null,
+  groups?: ModelUserGroupConnection | null,
+  tags?: ModelUserTagConnection | null,
   logs?: ModelLogConnection | null,
+  posts?: ModelPostConnection | null,
+  comments?: ModelCommentConnection | null,
   updatedAt: string,
 };
 
@@ -139,23 +142,63 @@ export enum GenderOptions {
 }
 
 
-export type ModelGroupUserConnection = {
-  __typename: "ModelGroupUserConnection",
-  items:  Array<GroupUser | null >,
+export type ModelUserGroupConnection = {
+  __typename: "ModelUserGroupConnection",
+  items:  Array<UserGroup | null >,
   nextToken?: string | null,
 };
 
-export type GroupUser = {
-  __typename: "GroupUser",
+export type UserGroup = {
+  __typename: "UserGroup",
   id: string,
   group: string,
   userID: string,
   user?: User | null,
-  profileID: string,
-  profile?: Profile | null,
-  createdAt?: string | null,
+  createdAt: string,
   updatedAt: string,
 };
+
+export type ModelUserTagConnection = {
+  __typename: "ModelUserTagConnection",
+  items:  Array<UserTag | null >,
+  nextToken?: string | null,
+};
+
+export type UserTag = {
+  __typename: "UserTag",
+  id: string,
+  tagID: string,
+  tag?: Tag | null,
+  userID: string,
+  user?: User | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type Tag = {
+  __typename: "Tag",
+  id: string,
+  name: string,
+  type: TagTypes,
+  status: TagStatus,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export enum TagTypes {
+  MODALITIES = "MODALITIES",
+  SPECIALTIES = "SPECIALTIES",
+  REGIONS = "REGIONS",
+  GROUPS = "GROUPS",
+  AREAS = "AREAS",
+}
+
+
+export enum TagStatus {
+  ON = "ON",
+  OFF = "OFF",
+}
+
 
 export type ModelLogConnection = {
   __typename: "ModelLogConnection",
@@ -167,7 +210,6 @@ export type Log = {
   __typename: "Log",
   id: string,
   userID: string,
-  source: LogSource,
   user?: User | null,
   title?: string | null,
   description?: string | null,
@@ -184,15 +226,75 @@ export type Log = {
   provider?: string | null,
   lat?: number | null,
   lng?: number | null,
-  createdAt?: string | null,
+  createdAt: string,
   isError?: boolean | null,
   updatedAt: string,
 };
 
-export enum LogSource {
-  APP = "APP",
+export type ModelPostConnection = {
+  __typename: "ModelPostConnection",
+  items:  Array<Post | null >,
+  nextToken?: string | null,
+};
+
+export type Post = {
+  __typename: "Post",
+  id: string,
+  type: PostProviders,
+  title: string,
+  description?: string | null,
+  content?: string | null,
+  vimeoCode?: string | null,
+  videoKey?: string | null,
+  thumbnail?: string | null,
+  createdAt?: string | null,
+  userID: string,
+  user?: User | null,
+  tags?: ModelPostTagConnection | null,
+  comments?: ModelCommentConnection | null,
+  updatedAt: string,
+};
+
+export enum PostProviders {
+  VIMEO = "VIMEO",
+  S3 = "S3",
 }
 
+
+export type ModelPostTagConnection = {
+  __typename: "ModelPostTagConnection",
+  items:  Array<PostTag | null >,
+  nextToken?: string | null,
+};
+
+export type PostTag = {
+  __typename: "PostTag",
+  id: string,
+  postID: string,
+  post?: Post | null,
+  tagID: string,
+  tag?: Tag | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ModelCommentConnection = {
+  __typename: "ModelCommentConnection",
+  items:  Array<Comment | null >,
+  nextToken?: string | null,
+};
+
+export type Comment = {
+  __typename: "Comment",
+  id: string,
+  postID: string,
+  post?: Post | null,
+  userID: string,
+  user?: User | null,
+  content: string,
+  createdAt?: string | null,
+  updatedAt: string,
+};
 
 export type UpdateUserInput = {
   id: string,
@@ -277,22 +379,18 @@ export type DeleteProfileInput = {
   userID: string,
 };
 
-export type CreateGroupUserInput = {
+export type CreateUserGroupInput = {
   id?: string | null,
   group: string,
   userID: string,
-  profileID: string,
-  createdAt?: string | null,
 };
 
-export type ModelGroupUserConditionInput = {
+export type ModelUserGroupConditionInput = {
   group?: ModelStringInput | null,
   userID?: ModelIDInput | null,
-  profileID?: ModelIDInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelGroupUserConditionInput | null > | null,
-  or?: Array< ModelGroupUserConditionInput | null > | null,
-  not?: ModelGroupUserConditionInput | null,
+  and?: Array< ModelUserGroupConditionInput | null > | null,
+  or?: Array< ModelUserGroupConditionInput | null > | null,
+  not?: ModelUserGroupConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -311,7 +409,62 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type DeleteGroupUserInput = {
+export type DeleteUserGroupInput = {
+  id: string,
+};
+
+export type CreateUserTagInput = {
+  id?: string | null,
+  tagID: string,
+  userID: string,
+};
+
+export type ModelUserTagConditionInput = {
+  tagID?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  and?: Array< ModelUserTagConditionInput | null > | null,
+  or?: Array< ModelUserTagConditionInput | null > | null,
+  not?: ModelUserTagConditionInput | null,
+};
+
+export type DeleteUserTagInput = {
+  id: string,
+};
+
+export type CreateTagInput = {
+  id?: string | null,
+  name: string,
+  type: TagTypes,
+  status: TagStatus,
+};
+
+export type ModelTagConditionInput = {
+  name?: ModelStringInput | null,
+  type?: ModelTagTypesInput | null,
+  status?: ModelTagStatusInput | null,
+  and?: Array< ModelTagConditionInput | null > | null,
+  or?: Array< ModelTagConditionInput | null > | null,
+  not?: ModelTagConditionInput | null,
+};
+
+export type ModelTagTypesInput = {
+  eq?: TagTypes | null,
+  ne?: TagTypes | null,
+};
+
+export type ModelTagStatusInput = {
+  eq?: TagStatus | null,
+  ne?: TagStatus | null,
+};
+
+export type UpdateTagInput = {
+  id: string,
+  name?: string | null,
+  type?: TagTypes | null,
+  status?: TagStatus | null,
+};
+
+export type DeleteTagInput = {
   id: string,
 };
 
@@ -323,7 +476,7 @@ export type CreateAddressInput = {
   street?: string | null,
   number?: string | null,
   complement?: string | null,
-  zipcode?: string | null,
+  zipCode?: string | null,
   neighborhood?: string | null,
   city?: string | null,
   state?: string | null,
@@ -338,7 +491,7 @@ export type ModelAddressConditionInput = {
   street?: ModelStringInput | null,
   number?: ModelStringInput | null,
   complement?: ModelStringInput | null,
-  zipcode?: ModelStringInput | null,
+  zipCode?: ModelStringInput | null,
   neighborhood?: ModelStringInput | null,
   city?: ModelStringInput | null,
   state?: ModelStringInput | null,
@@ -358,7 +511,7 @@ export type Address = {
   street?: string | null,
   number?: string | null,
   complement?: string | null,
-  zipcode?: string | null,
+  zipCode?: string | null,
   neighborhood?: string | null,
   city?: string | null,
   state?: string | null,
@@ -376,7 +529,7 @@ export type UpdateAddressInput = {
   street?: string | null,
   number?: string | null,
   complement?: string | null,
-  zipcode?: string | null,
+  zipCode?: string | null,
   neighborhood?: string | null,
   city?: string | null,
   state?: string | null,
@@ -485,7 +638,6 @@ export type DeletePayMethodInput = {
 export type CreateLogInput = {
   id?: string | null,
   userID: string,
-  source: LogSource,
   title?: string | null,
   description?: string | null,
   manufacturer?: string | null,
@@ -507,7 +659,6 @@ export type CreateLogInput = {
 
 export type ModelLogConditionInput = {
   userID?: ModelIDInput | null,
-  source?: ModelLogSourceInput | null,
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   manufacturer?: ModelStringInput | null,
@@ -528,11 +679,6 @@ export type ModelLogConditionInput = {
   and?: Array< ModelLogConditionInput | null > | null,
   or?: Array< ModelLogConditionInput | null > | null,
   not?: ModelLogConditionInput | null,
-};
-
-export type ModelLogSourceInput = {
-  eq?: LogSource | null,
-  ne?: LogSource | null,
 };
 
 export type ModelFloatInput = {
@@ -557,7 +703,7 @@ export type CreateConfigInput = {
   youtube?: string | null,
   linkedin?: string | null,
   phoneSac?: string | null,
-  phoneWhatsapp?: string | null,
+  WhatsApp?: string | null,
 };
 
 export type ModelConfigConditionInput = {
@@ -569,7 +715,7 @@ export type ModelConfigConditionInput = {
   youtube?: ModelStringInput | null,
   linkedin?: ModelStringInput | null,
   phoneSac?: ModelStringInput | null,
-  phoneWhatsapp?: ModelStringInput | null,
+  WhatsApp?: ModelStringInput | null,
   and?: Array< ModelConfigConditionInput | null > | null,
   or?: Array< ModelConfigConditionInput | null > | null,
   not?: ModelConfigConditionInput | null,
@@ -586,7 +732,7 @@ export type Config = {
   youtube?: string | null,
   linkedin?: string | null,
   phoneSac?: string | null,
-  phoneWhatsapp?: string | null,
+  WhatsApp?: string | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -601,7 +747,7 @@ export type UpdateConfigInput = {
   youtube?: string | null,
   linkedin?: string | null,
   phoneSac?: string | null,
-  phoneWhatsapp?: string | null,
+  WhatsApp?: string | null,
 };
 
 export type CreateMidiaInput = {
@@ -677,18 +823,18 @@ export type DeleteMidiaInput = {
 export type CreateNotifyInput = {
   id?: string | null,
   userID: string,
-  date: string,
   content?: string | null,
   link?: string | null,
   viewed?: boolean | null,
+  createdAt?: string | null,
 };
 
 export type ModelNotifyConditionInput = {
   userID?: ModelIDInput | null,
-  date?: ModelStringInput | null,
   content?: ModelStringInput | null,
   link?: ModelStringInput | null,
   viewed?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelNotifyConditionInput | null > | null,
   or?: Array< ModelNotifyConditionInput | null > | null,
   not?: ModelNotifyConditionInput | null,
@@ -698,7 +844,6 @@ export type Notify = {
   __typename: "Notify",
   id: string,
   userID: string,
-  date: string,
   content?: string | null,
   link?: string | null,
   viewed?: boolean | null,
@@ -708,6 +853,148 @@ export type Notify = {
 
 export type DeleteNotifyInput = {
   id: string,
+};
+
+export type CreatePostInput = {
+  id?: string | null,
+  type: PostProviders,
+  title: string,
+  description?: string | null,
+  content?: string | null,
+  vimeoCode?: string | null,
+  videoKey?: string | null,
+  thumbnail?: string | null,
+  createdAt?: string | null,
+  userID: string,
+};
+
+export type ModelPostConditionInput = {
+  type?: ModelPostProvidersInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  vimeoCode?: ModelStringInput | null,
+  videoKey?: ModelStringInput | null,
+  thumbnail?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  and?: Array< ModelPostConditionInput | null > | null,
+  or?: Array< ModelPostConditionInput | null > | null,
+  not?: ModelPostConditionInput | null,
+};
+
+export type ModelPostProvidersInput = {
+  eq?: PostProviders | null,
+  ne?: PostProviders | null,
+};
+
+export type UpdatePostInput = {
+  id: string,
+  type?: PostProviders | null,
+  title?: string | null,
+  description?: string | null,
+  content?: string | null,
+  vimeoCode?: string | null,
+  videoKey?: string | null,
+  thumbnail?: string | null,
+  createdAt?: string | null,
+  userID?: string | null,
+};
+
+export type DeletePostInput = {
+  id: string,
+};
+
+export type CreatePostTagInput = {
+  id?: string | null,
+  postID: string,
+  tagID: string,
+};
+
+export type ModelPostTagConditionInput = {
+  postID?: ModelIDInput | null,
+  tagID?: ModelIDInput | null,
+  and?: Array< ModelPostTagConditionInput | null > | null,
+  or?: Array< ModelPostTagConditionInput | null > | null,
+  not?: ModelPostTagConditionInput | null,
+};
+
+export type DeletePostTagInput = {
+  id: string,
+};
+
+export type CreateCommentInput = {
+  id?: string | null,
+  postID: string,
+  userID: string,
+  content: string,
+  createdAt?: string | null,
+};
+
+export type ModelCommentConditionInput = {
+  postID?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  content?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelCommentConditionInput | null > | null,
+  or?: Array< ModelCommentConditionInput | null > | null,
+  not?: ModelCommentConditionInput | null,
+};
+
+export type UpdateCommentInput = {
+  id: string,
+  postID?: string | null,
+  userID?: string | null,
+  content?: string | null,
+  createdAt?: string | null,
+};
+
+export type DeleteCommentInput = {
+  id: string,
+};
+
+export type ModelTagFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  type?: ModelTagTypesInput | null,
+  status?: ModelTagStatusInput | null,
+  and?: Array< ModelTagFilterInput | null > | null,
+  or?: Array< ModelTagFilterInput | null > | null,
+  not?: ModelTagFilterInput | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type ModelTagConnection = {
+  __typename: "ModelTagConnection",
+  items:  Array<Tag | null >,
+  nextToken?: string | null,
+};
+
+export type ModelConfigFilterInput = {
+  id?: ModelIDInput | null,
+  googleAnalyticsID?: ModelStringInput | null,
+  googleSiteVerification?: ModelStringInput | null,
+  facebook?: ModelStringInput | null,
+  twitter?: ModelStringInput | null,
+  instagram?: ModelStringInput | null,
+  youtube?: ModelStringInput | null,
+  linkedin?: ModelStringInput | null,
+  phoneSac?: ModelStringInput | null,
+  WhatsApp?: ModelStringInput | null,
+  and?: Array< ModelConfigFilterInput | null > | null,
+  or?: Array< ModelConfigFilterInput | null > | null,
+  not?: ModelConfigFilterInput | null,
+};
+
+export type ModelConfigConnection = {
+  __typename: "ModelConfigConnection",
+  items:  Array<Config | null >,
+  nextToken?: string | null,
 };
 
 export type ModelMidiaFilterInput = {
@@ -723,12 +1010,6 @@ export type ModelMidiaFilterInput = {
   or?: Array< ModelMidiaFilterInput | null > | null,
   not?: ModelMidiaFilterInput | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelMidiaConnection = {
   __typename: "ModelMidiaConnection",
@@ -803,15 +1084,22 @@ export type ModelIDKeyConditionInput = {
   beginsWith?: string | null,
 };
 
-export type ModelGroupUserFilterInput = {
+export type ModelUserGroupFilterInput = {
   id?: ModelIDInput | null,
   group?: ModelStringInput | null,
   userID?: ModelIDInput | null,
-  profileID?: ModelIDInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelGroupUserFilterInput | null > | null,
-  or?: Array< ModelGroupUserFilterInput | null > | null,
-  not?: ModelGroupUserFilterInput | null,
+  and?: Array< ModelUserGroupFilterInput | null > | null,
+  or?: Array< ModelUserGroupFilterInput | null > | null,
+  not?: ModelUserGroupFilterInput | null,
+};
+
+export type ModelUserTagFilterInput = {
+  id?: ModelIDInput | null,
+  tagID?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  and?: Array< ModelUserTagFilterInput | null > | null,
+  or?: Array< ModelUserTagFilterInput | null > | null,
+  not?: ModelUserTagFilterInput | null,
 };
 
 export type ModelAddressFilterInput = {
@@ -822,7 +1110,7 @@ export type ModelAddressFilterInput = {
   street?: ModelStringInput | null,
   number?: ModelStringInput | null,
   complement?: ModelStringInput | null,
-  zipcode?: ModelStringInput | null,
+  zipCode?: ModelStringInput | null,
   neighborhood?: ModelStringInput | null,
   city?: ModelStringInput | null,
   state?: ModelStringInput | null,
@@ -866,7 +1154,6 @@ export type ModelPayMethodConnection = {
 export type ModelLogFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelIDInput | null,
-  source?: ModelLogSourceInput | null,
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   manufacturer?: ModelStringInput | null,
@@ -892,10 +1179,10 @@ export type ModelLogFilterInput = {
 export type ModelNotifyFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelIDInput | null,
-  date?: ModelStringInput | null,
   content?: ModelStringInput | null,
   link?: ModelStringInput | null,
   viewed?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
   and?: Array< ModelNotifyFilterInput | null > | null,
   or?: Array< ModelNotifyFilterInput | null > | null,
   not?: ModelNotifyFilterInput | null,
@@ -905,6 +1192,42 @@ export type ModelNotifyConnection = {
   __typename: "ModelNotifyConnection",
   items:  Array<Notify | null >,
   nextToken?: string | null,
+};
+
+export type ModelPostFilterInput = {
+  id?: ModelIDInput | null,
+  type?: ModelPostProvidersInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  vimeoCode?: ModelStringInput | null,
+  videoKey?: ModelStringInput | null,
+  thumbnail?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  userID?: ModelIDInput | null,
+  and?: Array< ModelPostFilterInput | null > | null,
+  or?: Array< ModelPostFilterInput | null > | null,
+  not?: ModelPostFilterInput | null,
+};
+
+export type ModelPostTagFilterInput = {
+  id?: ModelIDInput | null,
+  postID?: ModelIDInput | null,
+  tagID?: ModelIDInput | null,
+  and?: Array< ModelPostTagFilterInput | null > | null,
+  or?: Array< ModelPostTagFilterInput | null > | null,
+  not?: ModelPostTagFilterInput | null,
+};
+
+export type ModelCommentFilterInput = {
+  id?: ModelIDInput | null,
+  postID?: ModelIDInput | null,
+  userID?: ModelIDInput | null,
+  content?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelCommentFilterInput | null > | null,
+  or?: Array< ModelCommentFilterInput | null > | null,
+  not?: ModelCommentFilterInput | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -957,14 +1280,25 @@ export type CreateUserMutation = {
       updatedAt: string,
     } | null,
     groups?:  {
-      __typename: "ModelGroupUserConnection",
+      __typename: "ModelUserGroupConnection",
       items:  Array< {
-        __typename: "GroupUser",
+        __typename: "UserGroup",
         id: string,
         group: string,
         userID: string,
-        profileID: string,
-        createdAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    tags?:  {
+      __typename: "ModelUserTagConnection",
+      items:  Array< {
+        __typename: "UserTag",
+        id: string,
+        tagID: string,
+        userID: string,
+        createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -975,7 +1309,6 @@ export type CreateUserMutation = {
         __typename: "Log",
         id: string,
         userID: string,
-        source: LogSource,
         title?: string | null,
         description?: string | null,
         manufacturer?: string | null,
@@ -991,8 +1324,39 @@ export type CreateUserMutation = {
         provider?: string | null,
         lat?: number | null,
         lng?: number | null,
-        createdAt?: string | null,
+        createdAt: string,
         isError?: boolean | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      items:  Array< {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -1051,14 +1415,25 @@ export type UpdateUserMutation = {
       updatedAt: string,
     } | null,
     groups?:  {
-      __typename: "ModelGroupUserConnection",
+      __typename: "ModelUserGroupConnection",
       items:  Array< {
-        __typename: "GroupUser",
+        __typename: "UserGroup",
         id: string,
         group: string,
         userID: string,
-        profileID: string,
-        createdAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    tags?:  {
+      __typename: "ModelUserTagConnection",
+      items:  Array< {
+        __typename: "UserTag",
+        id: string,
+        tagID: string,
+        userID: string,
+        createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -1069,7 +1444,6 @@ export type UpdateUserMutation = {
         __typename: "Log",
         id: string,
         userID: string,
-        source: LogSource,
         title?: string | null,
         description?: string | null,
         manufacturer?: string | null,
@@ -1085,8 +1459,39 @@ export type UpdateUserMutation = {
         provider?: string | null,
         lat?: number | null,
         lng?: number | null,
-        createdAt?: string | null,
+        createdAt: string,
         isError?: boolean | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      items:  Array< {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -1145,14 +1550,25 @@ export type DeleteUserMutation = {
       updatedAt: string,
     } | null,
     groups?:  {
-      __typename: "ModelGroupUserConnection",
+      __typename: "ModelUserGroupConnection",
       items:  Array< {
-        __typename: "GroupUser",
+        __typename: "UserGroup",
         id: string,
         group: string,
         userID: string,
-        profileID: string,
-        createdAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    tags?:  {
+      __typename: "ModelUserTagConnection",
+      items:  Array< {
+        __typename: "UserTag",
+        id: string,
+        tagID: string,
+        userID: string,
+        createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -1163,7 +1579,6 @@ export type DeleteUserMutation = {
         __typename: "Log",
         id: string,
         userID: string,
-        source: LogSource,
         title?: string | null,
         description?: string | null,
         manufacturer?: string | null,
@@ -1179,8 +1594,39 @@ export type DeleteUserMutation = {
         provider?: string | null,
         lat?: number | null,
         lng?: number | null,
-        createdAt?: string | null,
+        createdAt: string,
         isError?: boolean | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      items:  Array< {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -1229,11 +1675,23 @@ export type CreateProfileMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -1296,11 +1754,23 @@ export type UpdateProfileMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -1363,11 +1833,23 @@ export type DeleteProfileMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -1390,14 +1872,14 @@ export type DeleteProfileMutation = {
   } | null,
 };
 
-export type CreateGroupUserMutationVariables = {
-  input: CreateGroupUserInput,
-  condition?: ModelGroupUserConditionInput | null,
+export type CreateUserGroupMutationVariables = {
+  input: CreateUserGroupInput,
+  condition?: ModelUserGroupConditionInput | null,
 };
 
-export type CreateGroupUserMutation = {
-  createGroupUser?:  {
-    __typename: "GroupUser",
+export type CreateUserGroupMutation = {
+  createUserGroup?:  {
+    __typename: "UserGroup",
     id: string,
     group: string,
     userID: string,
@@ -1432,61 +1914,40 @@ export type CreateGroupUserMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
         nextToken?: string | null,
       } | null,
-      updatedAt: string,
-    } | null,
-    profileID: string,
-    profile?:  {
-      __typename: "Profile",
-      userID: string,
-      user?:  {
-        __typename: "User",
-        id: string,
-        name: string,
-        email?: string | null,
-        phone?: string | null,
-        status?: UserStatus | null,
-        active?: boolean | null,
-        avatar?: string | null,
-        search?: string | null,
-        createdAt?: string | null,
-        updatedAt: string,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
       } | null,
-      doc?: string | null,
-      docType?: DocTypes | null,
-      docProfession?: string | null,
-      profession?: string | null,
-      specialties?: string | null,
-      subSpecialties?: string | null,
-      bio?: string | null,
-      gender?: GenderOptions | null,
-      birth?: string | null,
-      birthDay?: string | null,
-      notes?: string | null,
-      allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
-      createdAt: string,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
     } | null,
-    createdAt?: string | null,
+    createdAt: string,
     updatedAt: string,
   } | null,
 };
 
-export type DeleteGroupUserMutationVariables = {
-  input: DeleteGroupUserInput,
-  condition?: ModelGroupUserConditionInput | null,
+export type DeleteUserGroupMutationVariables = {
+  input: DeleteUserGroupInput,
+  condition?: ModelUserGroupConditionInput | null,
 };
 
-export type DeleteGroupUserMutation = {
-  deleteGroupUser?:  {
-    __typename: "GroupUser",
+export type DeleteUserGroupMutation = {
+  deleteUserGroup?:  {
+    __typename: "UserGroup",
     id: string,
     group: string,
     userID: string,
@@ -1521,49 +1982,233 @@ export type DeleteGroupUserMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
         nextToken?: string | null,
       } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
     } | null,
-    profileID: string,
-    profile?:  {
-      __typename: "Profile",
-      userID: string,
-      user?:  {
-        __typename: "User",
-        id: string,
-        name: string,
-        email?: string | null,
-        phone?: string | null,
-        status?: UserStatus | null,
-        active?: boolean | null,
-        avatar?: string | null,
-        search?: string | null,
-        createdAt?: string | null,
-        updatedAt: string,
-      } | null,
-      doc?: string | null,
-      docType?: DocTypes | null,
-      docProfession?: string | null,
-      profession?: string | null,
-      specialties?: string | null,
-      subSpecialties?: string | null,
-      bio?: string | null,
-      gender?: GenderOptions | null,
-      birth?: string | null,
-      birthDay?: string | null,
-      notes?: string | null,
-      allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateUserTagMutationVariables = {
+  input: CreateUserTagInput,
+  condition?: ModelUserTagConditionInput | null,
+};
+
+export type CreateUserTagMutation = {
+  createUserTag?:  {
+    __typename: "UserTag",
+    id: string,
+    tagID: string,
+    tag?:  {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
       createdAt: string,
       updatedAt: string,
     } | null,
-    createdAt?: string | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteUserTagMutationVariables = {
+  input: DeleteUserTagInput,
+  condition?: ModelUserTagConditionInput | null,
+};
+
+export type DeleteUserTagMutation = {
+  deleteUserTag?:  {
+    __typename: "UserTag",
+    id: string,
+    tagID: string,
+    tag?:  {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateTagMutationVariables = {
+  input: CreateTagInput,
+  condition?: ModelTagConditionInput | null,
+};
+
+export type CreateTagMutation = {
+  createTag?:  {
+    __typename: "Tag",
+    id: string,
+    name: string,
+    type: TagTypes,
+    status: TagStatus,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateTagMutationVariables = {
+  input: UpdateTagInput,
+  condition?: ModelTagConditionInput | null,
+};
+
+export type UpdateTagMutation = {
+  updateTag?:  {
+    __typename: "Tag",
+    id: string,
+    name: string,
+    type: TagTypes,
+    status: TagStatus,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteTagMutationVariables = {
+  input: DeleteTagInput,
+  condition?: ModelTagConditionInput | null,
+};
+
+export type DeleteTagMutation = {
+  deleteTag?:  {
+    __typename: "Tag",
+    id: string,
+    name: string,
+    type: TagTypes,
+    status: TagStatus,
+    createdAt: string,
     updatedAt: string,
   } | null,
 };
@@ -1583,7 +2228,7 @@ export type CreateAddressMutation = {
     street?: string | null,
     number?: string | null,
     complement?: string | null,
-    zipcode?: string | null,
+    zipCode?: string | null,
     neighborhood?: string | null,
     city?: string | null,
     state?: string | null,
@@ -1609,7 +2254,7 @@ export type UpdateAddressMutation = {
     street?: string | null,
     number?: string | null,
     complement?: string | null,
-    zipcode?: string | null,
+    zipCode?: string | null,
     neighborhood?: string | null,
     city?: string | null,
     state?: string | null,
@@ -1635,7 +2280,7 @@ export type DeleteAddressMutation = {
     street?: string | null,
     number?: string | null,
     complement?: string | null,
-    zipcode?: string | null,
+    zipCode?: string | null,
     neighborhood?: string | null,
     city?: string | null,
     state?: string | null,
@@ -1731,7 +2376,6 @@ export type CreateLogMutation = {
     __typename: "Log",
     id: string,
     userID: string,
-    source: LogSource,
     user?:  {
       __typename: "User",
       id: string,
@@ -1763,11 +2407,23 @@ export type CreateLogMutation = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -1787,7 +2443,7 @@ export type CreateLogMutation = {
     provider?: string | null,
     lat?: number | null,
     lng?: number | null,
-    createdAt?: string | null,
+    createdAt: string,
     isError?: boolean | null,
     updatedAt: string,
   } | null,
@@ -1810,7 +2466,7 @@ export type CreateConfigMutation = {
     youtube?: string | null,
     linkedin?: string | null,
     phoneSac?: string | null,
-    phoneWhatsapp?: string | null,
+    WhatsApp?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1833,7 +2489,7 @@ export type UpdateConfigMutation = {
     youtube?: string | null,
     linkedin?: string | null,
     phoneSac?: string | null,
-    phoneWhatsapp?: string | null,
+    WhatsApp?: string | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1912,7 +2568,6 @@ export type CreateNotifyMutation = {
     __typename: "Notify",
     id: string,
     userID: string,
-    date: string,
     content?: string | null,
     link?: string | null,
     viewed?: boolean | null,
@@ -1931,11 +2586,739 @@ export type DeleteNotifyMutation = {
     __typename: "Notify",
     id: string,
     userID: string,
-    date: string,
     content?: string | null,
     link?: string | null,
     viewed?: boolean | null,
     createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreatePostMutationVariables = {
+  input: CreatePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type CreatePostMutation = {
+  createPost?:  {
+    __typename: "Post",
+    id: string,
+    type: PostProviders,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    vimeoCode?: string | null,
+    videoKey?: string | null,
+    thumbnail?: string | null,
+    createdAt?: string | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    tags?:  {
+      __typename: "ModelPostTagConnection",
+      items:  Array< {
+        __typename: "PostTag",
+        id: string,
+        postID: string,
+        tagID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePostMutationVariables = {
+  input: UpdatePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type UpdatePostMutation = {
+  updatePost?:  {
+    __typename: "Post",
+    id: string,
+    type: PostProviders,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    vimeoCode?: string | null,
+    videoKey?: string | null,
+    thumbnail?: string | null,
+    createdAt?: string | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    tags?:  {
+      __typename: "ModelPostTagConnection",
+      items:  Array< {
+        __typename: "PostTag",
+        id: string,
+        postID: string,
+        tagID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePostMutationVariables = {
+  input: DeletePostInput,
+  condition?: ModelPostConditionInput | null,
+};
+
+export type DeletePostMutation = {
+  deletePost?:  {
+    __typename: "Post",
+    id: string,
+    type: PostProviders,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    vimeoCode?: string | null,
+    videoKey?: string | null,
+    thumbnail?: string | null,
+    createdAt?: string | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    tags?:  {
+      __typename: "ModelPostTagConnection",
+      items:  Array< {
+        __typename: "PostTag",
+        id: string,
+        postID: string,
+        tagID: string,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreatePostTagMutationVariables = {
+  input: CreatePostTagInput,
+  condition?: ModelPostTagConditionInput | null,
+};
+
+export type CreatePostTagMutation = {
+  createPostTag?:  {
+    __typename: "PostTag",
+    id: string,
+    postID: string,
+    post?:  {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    tagID: string,
+    tag?:  {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePostTagMutationVariables = {
+  input: DeletePostTagInput,
+  condition?: ModelPostTagConditionInput | null,
+};
+
+export type DeletePostTagMutation = {
+  deletePostTag?:  {
+    __typename: "PostTag",
+    id: string,
+    postID: string,
+    post?:  {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    tagID: string,
+    tag?:  {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateCommentMutationVariables = {
+  input: CreateCommentInput,
+  condition?: ModelCommentConditionInput | null,
+};
+
+export type CreateCommentMutation = {
+  createComment?:  {
+    __typename: "Comment",
+    id: string,
+    postID: string,
+    post?:  {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    content: string,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateCommentMutationVariables = {
+  input: UpdateCommentInput,
+  condition?: ModelCommentConditionInput | null,
+};
+
+export type UpdateCommentMutation = {
+  updateComment?:  {
+    __typename: "Comment",
+    id: string,
+    postID: string,
+    post?:  {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    content: string,
+    createdAt?: string | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteCommentMutationVariables = {
+  input: DeleteCommentInput,
+  condition?: ModelCommentConditionInput | null,
+};
+
+export type DeleteCommentMutation = {
+  deleteComment?:  {
+    __typename: "Comment",
+    id: string,
+    postID: string,
+    post?:  {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    userID: string,
+    user?:  {
+      __typename: "User",
+      id: string,
+      name: string,
+      email?: string | null,
+      phone?: string | null,
+      status?: UserStatus | null,
+      active?: boolean | null,
+      avatar?: string | null,
+      search?: string | null,
+      createdAt?: string | null,
+      profile?:  {
+        __typename: "Profile",
+        userID: string,
+        doc?: string | null,
+        docType?: DocTypes | null,
+        docProfession?: string | null,
+        profession?: string | null,
+        specialties?: string | null,
+        subSpecialties?: string | null,
+        bio?: string | null,
+        gender?: GenderOptions | null,
+        birth?: string | null,
+        birthDay?: string | null,
+        notes?: string | null,
+        allowCookiesPreference?: boolean | null,
+        allowCookiesStatistic?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      groups?:  {
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
+        nextToken?: string | null,
+      } | null,
+      logs?:  {
+        __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    content: string,
+    createdAt?: string | null,
     updatedAt: string,
   } | null,
 };
@@ -1989,14 +3372,25 @@ export type GetUserQuery = {
       updatedAt: string,
     } | null,
     groups?:  {
-      __typename: "ModelGroupUserConnection",
+      __typename: "ModelUserGroupConnection",
       items:  Array< {
-        __typename: "GroupUser",
+        __typename: "UserGroup",
         id: string,
         group: string,
         userID: string,
-        profileID: string,
-        createdAt?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    tags?:  {
+      __typename: "ModelUserTagConnection",
+      items:  Array< {
+        __typename: "UserTag",
+        id: string,
+        tagID: string,
+        userID: string,
+        createdAt: string,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -2007,7 +3401,6 @@ export type GetUserQuery = {
         __typename: "Log",
         id: string,
         userID: string,
-        source: LogSource,
         title?: string | null,
         description?: string | null,
         manufacturer?: string | null,
@@ -2023,8 +3416,39 @@ export type GetUserQuery = {
         provider?: string | null,
         lat?: number | null,
         lng?: number | null,
-        createdAt?: string | null,
+        createdAt: string,
         isError?: boolean | null,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      items:  Array< {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    comments?:  {
+      __typename: "ModelCommentConnection",
+      items:  Array< {
+        __typename: "Comment",
+        id: string,
+        postID: string,
+        userID: string,
+        content: string,
+        createdAt?: string | null,
         updatedAt: string,
       } | null >,
       nextToken?: string | null,
@@ -2072,11 +3496,23 @@ export type GetProfileQuery = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -2099,25 +3535,57 @@ export type GetProfileQuery = {
   } | null,
 };
 
-export type GetConfigQueryVariables = {
-  id: string,
+export type ListTagsQueryVariables = {
+  id?: string | null,
+  filter?: ModelTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
 };
 
-export type GetConfigQuery = {
-  getConfig?:  {
-    __typename: "Config",
-    id: string,
-    googleAnalyticsID?: string | null,
-    googleSiteVerification?: string | null,
-    facebook?: string | null,
-    twitter?: string | null,
-    instagram?: string | null,
-    youtube?: string | null,
-    linkedin?: string | null,
-    phoneSac?: string | null,
-    phoneWhatsapp?: string | null,
-    createdAt: string,
-    updatedAt: string,
+export type ListTagsQuery = {
+  listTags?:  {
+    __typename: "ModelTagConnection",
+    items:  Array< {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListConfigQueryVariables = {
+  id?: string | null,
+  filter?: ModelConfigFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListConfigQuery = {
+  ListConfig?:  {
+    __typename: "ModelConfigConnection",
+    items:  Array< {
+      __typename: "Config",
+      id: string,
+      googleAnalyticsID?: string | null,
+      googleSiteVerification?: string | null,
+      facebook?: string | null,
+      twitter?: string | null,
+      instagram?: string | null,
+      youtube?: string | null,
+      linkedin?: string | null,
+      phoneSac?: string | null,
+      WhatsApp?: string | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
   } | null,
 };
 
@@ -2191,11 +3659,23 @@ export type GetUserByEmailQuery = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -2246,11 +3726,23 @@ export type GetUserByPhoneQuery = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -2302,11 +3794,23 @@ export type ListUsersByStatusCreatedAtQuery = {
         updatedAt: string,
       } | null,
       groups?:  {
-        __typename: "ModelGroupUserConnection",
+        __typename: "ModelUserGroupConnection",
+        nextToken?: string | null,
+      } | null,
+      tags?:  {
+        __typename: "ModelUserTagConnection",
         nextToken?: string | null,
       } | null,
       logs?:  {
         __typename: "ModelLogConnection",
+        nextToken?: string | null,
+      } | null,
+      posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
         nextToken?: string | null,
       } | null,
       updatedAt: string,
@@ -2362,20 +3866,20 @@ export type ListUsersByBirthDayQuery = {
   } | null,
 };
 
-export type ListUsersByGroupQueryVariables = {
+export type ListUsersByGroupUserQueryVariables = {
   group: string,
   userID?: ModelIDKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelGroupUserFilterInput | null,
+  filter?: ModelUserGroupFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListUsersByGroupQuery = {
-  listUsersByGroup?:  {
-    __typename: "ModelGroupUserConnection",
+export type ListUsersByGroupUserQuery = {
+  listUsersByGroupUser?:  {
+    __typename: "ModelUserGroupConnection",
     items:  Array< {
-      __typename: "GroupUser",
+      __typename: "UserGroup",
       id: string,
       group: string,
       userID: string,
@@ -2392,47 +3896,27 @@ export type ListUsersByGroupQuery = {
         createdAt?: string | null,
         updatedAt: string,
       } | null,
-      profileID: string,
-      profile?:  {
-        __typename: "Profile",
-        userID: string,
-        doc?: string | null,
-        docType?: DocTypes | null,
-        docProfession?: string | null,
-        profession?: string | null,
-        specialties?: string | null,
-        subSpecialties?: string | null,
-        bio?: string | null,
-        gender?: GenderOptions | null,
-        birth?: string | null,
-        birthDay?: string | null,
-        notes?: string | null,
-        allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      createdAt?: string | null,
+      createdAt: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
   } | null,
 };
 
-export type ListGroupsByUserQueryVariables = {
+export type ListGroupsByUserGroupQueryVariables = {
   userID: string,
   group?: ModelStringKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelGroupUserFilterInput | null,
+  filter?: ModelUserGroupFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListGroupsByUserQuery = {
-  listGroupsByUser?:  {
-    __typename: "ModelGroupUserConnection",
+export type ListGroupsByUserGroupQuery = {
+  listGroupsByUserGroup?:  {
+    __typename: "ModelUserGroupConnection",
     items:  Array< {
-      __typename: "GroupUser",
+      __typename: "UserGroup",
       id: string,
       group: string,
       userID: string,
@@ -2449,27 +3933,147 @@ export type ListGroupsByUserQuery = {
         createdAt?: string | null,
         updatedAt: string,
       } | null,
-      profileID: string,
-      profile?:  {
-        __typename: "Profile",
-        userID: string,
-        doc?: string | null,
-        docType?: DocTypes | null,
-        docProfession?: string | null,
-        profession?: string | null,
-        specialties?: string | null,
-        subSpecialties?: string | null,
-        bio?: string | null,
-        gender?: GenderOptions | null,
-        birth?: string | null,
-        birthDay?: string | null,
-        notes?: string | null,
-        allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListUsersByTagQueryVariables = {
+  tagID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListUsersByTagQuery = {
+  listUsersByTag?:  {
+    __typename: "ModelUserTagConnection",
+    items:  Array< {
+      __typename: "UserTag",
+      id: string,
+      tagID: string,
+      tag?:  {
+        __typename: "Tag",
+        id: string,
+        name: string,
+        type: TagTypes,
+        status: TagStatus,
         createdAt: string,
         updatedAt: string,
       } | null,
-      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListTagsByUserQueryVariables = {
+  userID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTagsByUserQuery = {
+  listTagsByUser?:  {
+    __typename: "ModelUserTagConnection",
+    items:  Array< {
+      __typename: "UserTag",
+      id: string,
+      tagID: string,
+      tag?:  {
+        __typename: "Tag",
+        id: string,
+        name: string,
+        type: TagTypes,
+        status: TagStatus,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListTagsByTypeNameQueryVariables = {
+  type: TagTypes,
+  name?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTagsByTypeNameQuery = {
+  listTagsByTypeName?:  {
+    __typename: "ModelTagConnection",
+    items:  Array< {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListTagsByStatusNameQueryVariables = {
+  status: TagStatus,
+  name?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTagsByStatusNameQuery = {
+  listTagsByStatusName?:  {
+    __typename: "ModelTagConnection",
+    items:  Array< {
+      __typename: "Tag",
+      id: string,
+      name: string,
+      type: TagTypes,
+      status: TagStatus,
+      createdAt: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -2496,7 +4100,7 @@ export type ListAddressesByUserQuery = {
       street?: string | null,
       number?: string | null,
       complement?: string | null,
-      zipcode?: string | null,
+      zipCode?: string | null,
       neighborhood?: string | null,
       city?: string | null,
       state?: string | null,
@@ -2557,7 +4161,6 @@ export type ListLogsByUserCreatedAtQuery = {
       __typename: "Log",
       id: string,
       userID: string,
-      source: LogSource,
       user?:  {
         __typename: "User",
         id: string,
@@ -2586,60 +4189,7 @@ export type ListLogsByUserCreatedAtQuery = {
       provider?: string | null,
       lat?: number | null,
       lng?: number | null,
-      createdAt?: string | null,
-      isError?: boolean | null,
-      updatedAt: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type ListLogsBySourceCreatedAtQueryVariables = {
-  source: LogSource,
-  createdAt?: ModelStringKeyConditionInput | null,
-  sortDirection?: ModelSortDirection | null,
-  filter?: ModelLogFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListLogsBySourceCreatedAtQuery = {
-  listLogsBySourceCreatedAt?:  {
-    __typename: "ModelLogConnection",
-    items:  Array< {
-      __typename: "Log",
-      id: string,
-      userID: string,
-      source: LogSource,
-      user?:  {
-        __typename: "User",
-        id: string,
-        name: string,
-        email?: string | null,
-        phone?: string | null,
-        status?: UserStatus | null,
-        active?: boolean | null,
-        avatar?: string | null,
-        search?: string | null,
-        createdAt?: string | null,
-        updatedAt: string,
-      } | null,
-      title?: string | null,
-      description?: string | null,
-      manufacturer?: string | null,
-      model?: string | null,
-      osName?: string | null,
-      osVersion?: string | null,
-      platform?: string | null,
-      uuid?: string | null,
-      ip?: string | null,
-      city?: string | null,
-      region?: string | null,
-      country?: string | null,
-      provider?: string | null,
-      lat?: number | null,
-      lng?: number | null,
-      createdAt?: string | null,
+      createdAt: string,
       isError?: boolean | null,
       updatedAt: string,
     } | null >,
@@ -2675,27 +4225,273 @@ export type ListMidiaByKeyQuery = {
   } | null,
 };
 
-export type NotifyByUserDateQueryVariables = {
+export type NotifyByUserCreatedAtQueryVariables = {
   userID: string,
-  date?: ModelStringKeyConditionInput | null,
+  createdAt?: ModelStringKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelNotifyFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type NotifyByUserDateQuery = {
-  notifyByUserDate?:  {
+export type NotifyByUserCreatedAtQuery = {
+  notifyByUserCreatedAt?:  {
     __typename: "ModelNotifyConnection",
     items:  Array< {
       __typename: "Notify",
       id: string,
       userID: string,
-      date: string,
       content?: string | null,
       link?: string | null,
       viewed?: boolean | null,
       createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListPostsByUserCreatedAtQueryVariables = {
+  userID: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPostsByUserCreatedAtQuery = {
+  listPostsByUserCreatedAt?:  {
+    __typename: "ModelPostConnection",
+    items:  Array< {
+      __typename: "Post",
+      id: string,
+      type: PostProviders,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      vimeoCode?: string | null,
+      videoKey?: string | null,
+      thumbnail?: string | null,
+      createdAt?: string | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      tags?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      comments?:  {
+        __typename: "ModelCommentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListTagsByPostQueryVariables = {
+  postID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListTagsByPostQuery = {
+  listTagsByPost?:  {
+    __typename: "ModelPostTagConnection",
+    items:  Array< {
+      __typename: "PostTag",
+      id: string,
+      postID: string,
+      post?:  {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null,
+      tagID: string,
+      tag?:  {
+        __typename: "Tag",
+        id: string,
+        name: string,
+        type: TagTypes,
+        status: TagStatus,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListPostsByTagQueryVariables = {
+  tagID: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPostsByTagQuery = {
+  listPostsByTag?:  {
+    __typename: "ModelPostTagConnection",
+    items:  Array< {
+      __typename: "PostTag",
+      id: string,
+      postID: string,
+      post?:  {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null,
+      tagID: string,
+      tag?:  {
+        __typename: "Tag",
+        id: string,
+        name: string,
+        type: TagTypes,
+        status: TagStatus,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListCommentsByPostCreatedAtQueryVariables = {
+  postID: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCommentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListCommentsByPostCreatedAtQuery = {
+  listCommentsByPostCreatedAt?:  {
+    __typename: "ModelCommentConnection",
+    items:  Array< {
+      __typename: "Comment",
+      id: string,
+      postID: string,
+      post?:  {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      content: string,
+      createdAt?: string | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListCommentsByUserCreatedAtQueryVariables = {
+  userID: string,
+  createdAt?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelCommentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListCommentsByUserCreatedAtQuery = {
+  listCommentsByUserCreatedAt?:  {
+    __typename: "ModelCommentConnection",
+    items:  Array< {
+      __typename: "Comment",
+      id: string,
+      postID: string,
+      post?:  {
+        __typename: "Post",
+        id: string,
+        type: PostProviders,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        vimeoCode?: string | null,
+        videoKey?: string | null,
+        thumbnail?: string | null,
+        createdAt?: string | null,
+        userID: string,
+        updatedAt: string,
+      } | null,
+      userID: string,
+      user?:  {
+        __typename: "User",
+        id: string,
+        name: string,
+        email?: string | null,
+        phone?: string | null,
+        status?: UserStatus | null,
+        active?: boolean | null,
+        avatar?: string | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      content: string,
+      createdAt?: string | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,

@@ -15,7 +15,7 @@ type User
     subscriptions: null
   )
   @auth(rules: [{ allow: public, provider: apiKey }]) {
-  id: ID! @primaryKey
+  id: ID! @primaryKey 
   name: String!
   email: AWSEmail @index(name: "userByEmail", queryField: "getUserByEmail")
   phone: AWSPhone @index(name: "userByPhone", queryField: "getUserByPhone")
@@ -30,8 +30,11 @@ type User
   search: String
   createdAt: AWSDateTime
   profile: Profile @hasOne(fields: ["id"])
-  groups: [GroupUser] @hasMany(indexName: "groupsByUser", fields: ["id"])
+  groups: [UserGroup] @hasMany(indexName: "groupsByUser", fields: ["id"])
+  tags: [UserTag] @hasMany(indexName: "tagsByUser", fields: ["id"])
   logs: [Log] @hasMany(indexName: "logsByUser", fields: ["id"])
+  posts: [Post] @hasMany(indexName: "postsByUser", fields: ["id"])
+  comments: [Comment] @hasMany(indexName: "commentsByUser", fields: ["id"])
 }
 
 enum GenderOptions {
@@ -75,12 +78,12 @@ type Profile
   allowCookiesStatistic: Boolean
 }
 
-type GroupUser
+type UserGroup
   @model(
     mutations: {
-      create: "createGroupUser"
+      create: "createUserGroup"
       update: null
-      delete: "deleteGroupUser"
+      delete: "deleteUserGroup"
     }
     queries: { get: null, list: null }
     subscriptions: null
@@ -90,19 +93,70 @@ type GroupUser
   group: String!
     @index(
       name: "usersByGroup"
-      queryField: "listUsersByGroup"
+      queryField: "listUsersByGroupUser"
       sortKeyFields: ["userID"]
     )
   userID: ID!
     @index(
       name: "groupsByUser"
-      queryField: "listGroupsByUser"
+      queryField: "listGroupsByUserGroup"
       sortKeyFields: ["group"]
     )
   user: User @hasOne(fields: ["userID"])
-  profileID: ID!
-  profile: Profile @hasOne(fields: ["profileID"])
-  createdAt: AWSDateTime
+}
+
+type UserTag
+  @model(
+    mutations: {
+      create: "createUserTag"
+      update: null
+      delete: "deleteUserTag"
+    }
+    queries: { get: null, list: null }
+    subscriptions: null
+  )
+  @auth(rules: [{ allow: public, provider: apiKey }]) {
+  id: ID! @primaryKey
+  tagID: ID! @index(name: "usersByTag", queryField: "listUsersByTag")
+  tag: Tag @hasOne(fields: ["tagID"])
+  userID: ID! @index(name: "tagsByUser", queryField: "listTagsByUser")
+  user: User @hasOne(fields: ["userID"])
+}
+
+enum TagTypes {
+  MODALITIES
+  SPECIALTIES
+  REGIONS
+  GROUPS
+  AREAS
+}
+
+enum TagStatus {
+  ON
+  OFF
+}
+
+type Tag
+  @model(
+    mutations: { create: "createTag", update: "updateTag", delete: "deleteTag" }
+    queries: { get: null, list: "listTags" }
+    subscriptions: null
+  )
+  @auth(rules: [{ allow: public, provider: apiKey }]) {
+  id: ID! @primaryKey
+  name: String!
+  type: TagTypes!
+    @index(
+      name: "tagsByType"
+      queryField: "listTagsByTypeName"
+      sortKeyFields: ["name"]
+    )
+  status: TagStatus!
+    @index(
+      name: "tagsByStatus"
+      queryField: "listTagsByStatusName"
+      sortKeyFields: ["name"]
+    )
 }
 
 type Address
@@ -123,7 +177,7 @@ type Address
   street: String
   number: String
   complement: String
-  zipcode: String
+  zipCode: String
   neighborhood: String
   city: String
   state: String
@@ -164,10 +218,6 @@ type PayMethod
   cardPagarmeID: String
 }
 
-enum LogSource {
-  APP
-}
-
 type Log
   @model(
     mutations: { create: "createLog", update: null, delete: null }
@@ -181,12 +231,6 @@ type Log
     @index(
       name: "logsByUserCreatedAt"
       queryField: "listLogsByUserCreatedAt"
-      sortKeyFields: ["createdAt"]
-    )
-  source: LogSource!
-    @index(
-      name: "logsBySourceCreatedAt"
-      queryField: "listLogsBySourceCreatedAt"
       sortKeyFields: ["createdAt"]
     )
   user: User @belongsTo(fields: ["userID"])
@@ -205,14 +249,14 @@ type Log
   provider: String
   lat: Float
   lng: Float
-  createdAt: AWSDateTime
+  createdAt: AWSDateTime!
   isError: Boolean
 }
 
 type Config
   @model(
     mutations: { create: "createConfig", update: "updateConfig", delete: null }
-    queries: { get: "getConfig", list: null }
+    queries: { get: null, list: "ListConfig" }
     subscriptions: null
   )
   @auth(rules: [{ allow: public, provider: apiKey }]) {
@@ -225,7 +269,7 @@ type Config
   youtube: String
   linkedin: String
   phoneSac: AWSPhone
-  phoneWhatsapp: AWSPhone
+  WhatsApp: AWSPhone
 }
 
 enum MidiaTypes {
@@ -270,12 +314,78 @@ type Notify
   id: ID! @primaryKey
   userID: ID!
     @index(
-      name: "notifyByUserDate"
-      queryField: "notifyByUserDate"
-      sortKeyFields: ["date"]
+      name: "notifyByUserCreatedAt"
+      queryField: "notifyByUserCreatedAt"
+      sortKeyFields: ["createdAt"]
     )
-  date: AWSDateTime!
   content: String
   link: String
   viewed: Boolean
+  createdAt: AWSDateTime!
+}
+
+
+enum PostProviders {
+  VIMEO
+  S3
+}
+
+type Post
+  @model(
+    mutations: { create: "createPost", update: "updatePost", delete: "deletePost" }
+    queries: { get: null, list: null }
+    subscriptions: null
+  )
+  @auth(rules: [{ allow: public, provider: apiKey }]) {
+  id: ID! @primaryKey
+  type: PostProviders!
+  title: String!
+  description: String
+  content: String
+  vimeoCode: String
+  videoKey: String
+  thumbnail: String
+  createdAt: AWSDateTime
+  userID: ID! @index(name: "postsByUser", queryField: "listPostsByUserCreatedAt", sortKeyFields: ["createdAt"])
+  user: User @belongsTo(fields: ["userID"])
+  tags: [PostTag] @hasMany(indexName: "tagsByPost", fields: ["id"])
+  comments: [Comment] @hasMany(indexName: "commentsByPost", fields: ["id"])
+}
+
+type PostTag
+  @model(
+    mutations: {
+      create: "createPostTag"
+      update: null
+      delete: "deletePostTag"
+    }
+    queries: { get: null, list: null }
+    subscriptions: null
+  )
+  @auth(rules: [{ allow: public, provider: apiKey }]) {
+  id: ID! @primaryKey
+  postID: ID! @index(name: "tagsByPost", queryField: "listTagsByPost")
+  post: Post @hasOne(fields: ["postID"])
+  tagID: ID! @index(name: "postsByTag", queryField: "listPostsByTag")
+  tag: Tag @hasOne(fields: ["tagID"])
+}
+
+type Comment
+  @model(
+    mutations: {
+      create: "createComment"
+      update: "updateComment"
+      delete: "deleteComment"
+    }
+    queries: { get: null, list: null }
+    subscriptions: null
+  )
+  @auth(rules: [{ allow: public, provider: apiKey }]) {
+  id: ID! @primaryKey
+  postID: ID! @index(name: "commentsByPost", queryField: "listCommentsByPostCreatedAt", sortKeyFields: ["createdAt"])
+  post: Post @belongsTo(fields: ["postID"])
+  userID: ID! @index(name: "commentsByUser", queryField: "listCommentsByUserCreatedAt", sortKeyFields: ["createdAt"])
+  user: User @belongsTo(fields: ["userID"])
+  content: String!
+  createdAt: AWSDateTime
 }
