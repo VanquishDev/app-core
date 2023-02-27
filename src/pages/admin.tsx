@@ -24,7 +24,7 @@ function Index({ isPassedToWithAuthenticator }: Props) {
 
 export default withAuthenticator(App, {
   initialState: 'signIn',
-  loginMechanisms: ['username', 'email', 'phone_number'],
+  loginMechanisms: ['email', 'phone_number'],
   signUpAttributes: ['name', 'email', 'phone_number'],
   socialProviders: [], // 'amazon', 'apple', 'facebook', 'google'
   variation: 'modal',
@@ -43,7 +43,6 @@ export default withAuthenticator(App, {
             {/* Re-use default `Authenticator.SignUp.FormFields` */}
             <Authenticator.SignUp.FormFields />
 
-            {/* Append & require Terms & Conditions field to sign up  */}
             <CheckboxField
               errorMessage={validationErrors.acknowledgement as string}
               hasError={!!validationErrors.acknowledgement}
@@ -60,7 +59,7 @@ export default withAuthenticator(App, {
     async validateCustomSignUp(formData) {
       if (!formData.acknowledgement) {
         return {
-          acknowledgement: 'Você deve concordar com os termos e politicas.',
+          acknowledgement: '',
         };
       }
     },
@@ -70,21 +69,18 @@ export default withAuthenticator(App, {
       name: {
         order: 1
       },
-      username: {
-        order: 2
-      },
       email: {
-        order:3
+        order:2
       },
       phone_number: {
-        order:4,
+        order:3,
         dialCode: '+55'
       },
       password: {
-        order: 5
+        order: 4
       },
       confirm_password: {
-        order: 6
+        order: 5
       }
     },
   }

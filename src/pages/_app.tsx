@@ -107,14 +107,6 @@ function MyApp({ Component, pageProps }: any) {
     defineCustomElements(window);
   }, []);
 
-  const components = {
-    SignIn: {
-      Footer() {
-        return <div></div>;
-      },
-    },
-  };
-
   return (
     <>
       <Head>
