@@ -54,6 +54,7 @@ export default function Video(props: any) {
             <img
               src={'/avatar/user.png'}
               alt="avatar"
+              crossOrigin='anonymous'
             />
           </IonAvatar>
         </div>

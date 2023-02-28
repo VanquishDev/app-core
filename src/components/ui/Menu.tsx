@@ -100,6 +100,7 @@ const Menu: React.FC<Props> = (props: Props) => {
                 <img
                   src={'/avatar/user.png'}
                   alt="avatar"
+                  crossOrigin='anonymous'
                 />
               </IonAvatar>
             </div>

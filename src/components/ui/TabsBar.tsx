@@ -10,7 +10,7 @@ import {
   IonRouterOutlet,
 } from '@ionic/react';
 
-import { play, school, chatbubbles, addOutline } from 'ionicons/icons';
+import { play, school, chatbubbles, person } from 'ionicons/icons';
 
 export const TabsBar: React.FC = () => (
   <div style={{ height: 55 }} className="opacity-95">
@@ -32,9 +32,9 @@ export const TabsBar: React.FC = () => (
           <IonLabel color="primary">Mensagens</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab="add" href="/add">
-          <IonIcon icon={addOutline} aria-hidden="true" color="primary" />
-          <IonLabel color="primary">Adicionar</IonLabel>
+        <IonTabButton tab="profile" href="/profile">
+          <IonIcon icon={person} aria-hidden="true" color="primary" />
+          <IonLabel color="primary">Perfil</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

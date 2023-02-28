@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import {
   IonApp,
   IonContent,
@@ -73,6 +74,7 @@ const App: React.FC = () => {
 
   const { theme } = useGlobalContext();
   const { screenWidth } = useScreen();
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const doRefresh = () => {
     setTimeout(() => {
@@ -171,7 +173,7 @@ const App: React.FC = () => {
                     <IonIcon slot="icon-only" icon={search}></IonIcon>
                   </IonButton>
                 )}
-                {!showSearchbar && (
+                {(!showSearchbar && user) && (
                   <IonButton
                     onClick={() => {
                       setContentModal('FILTER');
@@ -243,7 +245,7 @@ const App: React.FC = () => {
               <IonInfiniteScrollContent></IonInfiniteScrollContent>
             </IonInfiniteScroll>
 
-            <IonFab slot="fixed" vertical="top" horizontal="end" edge={true}>
+            {user && <IonFab slot="fixed" vertical="top" horizontal="end" edge={true}>
               <IonFabButton>
                 <IonIcon icon={add}></IonIcon>
               </IonFabButton>
@@ -265,7 +267,7 @@ const App: React.FC = () => {
                   <IonIcon icon={scan}></IonIcon>
                 </IonFabButton>
               </IonFabList>
-            </IonFab>
+            </IonFab>}
           </IonContent>
 
           <IonFooter className="ion-hide-md-up">
