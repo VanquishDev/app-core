@@ -27,12 +27,18 @@ import {
   IonAvatar,
   IonLabel,
   IonProgressBar,
+  IonFab,
+  IonFabButton,
+  IonFabList,
 } from '@ionic/react';
 
-import { options, search } from 'ionicons/icons';
+import { options, search, add, cloudUpload, scan } from 'ionicons/icons';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
-import SessionListFilter from './SessionListFilter';
+import Filter from './Filter';
+import Upload from './Upload';
+import Capture from './Capture';
+
 import { TabsBar, Menu } from '@/components/ui';
 import { useGlobalContext } from '@/context/GlobalContext';
 import { useScreen } from '@/hooks/useScreen';
@@ -51,7 +57,8 @@ window
 
 const App: React.FC = () => {
   const [showSearchbar, setShowSearchbar] = useState(false);
-  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [contentModal, setContentModal] = useState('');
   const [segment, setSegment] = useState('all');
   const [searchText, setSearchText] = useState('');
   const [showCompleteToast, setShowCompleteToast] = useState(true);
@@ -62,6 +69,7 @@ const App: React.FC = () => {
 
   const pageRef = useRef<HTMLElement>(null);
   const ionRefresherRef = useRef<HTMLIonRefresherElement>(null);
+  const modal = useRef<HTMLIonModalElement>(null);
 
   const { theme } = useGlobalContext();
   const { screenWidth } = useScreen();
@@ -77,7 +85,7 @@ const App: React.FC = () => {
 
   const generateItems = () => {
     const newItems = [] as any;
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       newItems.push({
         id: 1 + items.length + i,
         title:
@@ -114,7 +122,6 @@ const App: React.FC = () => {
   useEffect(() => {
     generateItems();
     setShowLateral(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -129,7 +136,6 @@ const App: React.FC = () => {
 
         <IonPage ref={pageRef} className="ion-page" id="main">
           <IonHeader translucent={true}>
-            {false && <IonProgressBar type="indeterminate"></IonProgressBar>}
             <IonToolbar className="opacity-95">
               {!showSearchbar && (
                 <IonButtons slot="start">
@@ -166,7 +172,12 @@ const App: React.FC = () => {
                   </IonButton>
                 )}
                 {!showSearchbar && (
-                  <IonButton onClick={() => setShowFilterModal(true)}>
+                  <IonButton
+                    onClick={() => {
+                      setContentModal('FILTER');
+                      setShowModal(true);
+                    }}
+                  >
                     {ios ? (
                       'Filter'
                     ) : (
@@ -211,13 +222,6 @@ const App: React.FC = () => {
               <IonRefresherContent />
             </IonRefresher>
 
-            <IonToast
-              isOpen={showCompleteToast}
-              message="Refresh complete"
-              duration={2000}
-              onDidDismiss={() => setShowCompleteToast(false)}
-            />
-
             <IonList>
               {items.map((item, index) => (
                 <div key={item}>
@@ -229,6 +233,7 @@ const App: React.FC = () => {
                 </div>
               ))}
             </IonList>
+
             <IonInfiniteScroll
               onIonInfinite={(ev) => {
                 generateItems();
@@ -237,6 +242,30 @@ const App: React.FC = () => {
             >
               <IonInfiniteScrollContent></IonInfiniteScrollContent>
             </IonInfiniteScroll>
+
+            <IonFab slot="fixed" vertical="top" horizontal="end" edge={true}>
+              <IonFabButton>
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+              <IonFabList side="bottom">
+                <IonFabButton
+                  onClick={() => {
+                    setContentModal('UPLOAD');
+                    setShowModal(true);
+                  }}
+                >
+                  <IonIcon icon={cloudUpload}></IonIcon>
+                </IonFabButton>
+                <IonFabButton
+                  onClick={() => {
+                    setContentModal('CAPTURE');
+                    setShowModal(true);
+                  }}
+                >
+                  <IonIcon icon={scan}></IonIcon>
+                </IonFabButton>
+              </IonFabList>
+            </IonFab>
           </IonContent>
 
           <IonFooter className="ion-hide-md-up">
@@ -244,16 +273,30 @@ const App: React.FC = () => {
           </IonFooter>
 
           <IonModal
-            isOpen={showFilterModal}
-            onDidDismiss={() => setShowFilterModal(false)}
+            mode="ios"
+            isOpen={showModal}
+            onDidDismiss={() => setShowModal(false)}
             swipeToClose={true}
             presentingElement={pageRef.current!}
           >
-            <SessionListFilter
-              onDismissModal={() => setShowFilterModal(false)}
-              allTracks={[]}
-              filteredTracks={['aaa', 'bbb']}
-            />
+            {contentModal === 'FILTER' && (
+              <Filter
+                onDismissModal={() => setShowModal(false)}
+              />
+            )}
+
+            {contentModal === 'UPLOAD' && (
+              <Upload
+                onDismissModal={() => setShowModal(false)}
+              />
+            )}
+
+            {contentModal === 'CAPTURE' && (
+              <Capture
+                onDismissModal={() => setShowModal(false)}
+              />
+            )}
+
           </IonModal>
         </IonPage>
 

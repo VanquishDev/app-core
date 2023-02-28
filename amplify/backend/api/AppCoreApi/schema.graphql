@@ -148,7 +148,7 @@ type Tag
   type: TagTypes!
     @index(
       name: "tagsByType"
-      queryField: "listTagsByTypeName"
+      queryField: "type"
       sortKeyFields: ["name"]
     )
   status: TagStatus!

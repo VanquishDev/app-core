@@ -2,18 +2,13 @@ import React from 'react';
 import {
   IonMenu,
   IonContent,
-  IonMenuToggle,
   IonItem,
   IonIcon,
   IonLabel,
   IonList,
   IonListHeader,
   IonToggle,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonItemGroup,
-  IonFooter,
   IonAvatar,
 } from '@ionic/react';
 
@@ -43,7 +38,6 @@ const routes = {
     { title: 'Home', path: '/home', icon: playOutline, requiredLogged: false },
     { title: 'Cursos', path: '/course', icon: schoolOutline, requiredLogged: false },
     { title: 'Mensagens', path: '/message', icon: chatbubblesOutline, requiredLogged: true },
-    { title: 'Adicionar', path: '/add', icon: addOutline, requiredLogged: true },
   ],
   accountPages: [
     { title: 'Perfil', path: '/profile', icon: personOutline, requiredLogged: true },
