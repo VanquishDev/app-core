@@ -3940,16 +3940,17 @@ export type ListGroupsByUserGroupQuery = {
   } | null,
 };
 
-export type ListUsersByTagQueryVariables = {
+export type ListUsersByTagUserQueryVariables = {
   tagID: string,
+  userID?: ModelIDKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelUserTagFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListUsersByTagQuery = {
-  listUsersByTag?:  {
+export type ListUsersByTagUserQuery = {
+  listUsersByTagUser?:  {
     __typename: "ModelUserTagConnection",
     items:  Array< {
       __typename: "UserTag",
@@ -3985,16 +3986,17 @@ export type ListUsersByTagQuery = {
   } | null,
 };
 
-export type ListTagsByUserQueryVariables = {
+export type ListTagsByUserTagQueryVariables = {
   userID: string,
+  tagID?: ModelIDKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelUserTagFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListTagsByUserQuery = {
-  listTagsByUser?:  {
+export type ListTagsByUserTagQuery = {
+  listTagsByUserTag?:  {
     __typename: "ModelUserTagConnection",
     items:  Array< {
       __typename: "UserTag",

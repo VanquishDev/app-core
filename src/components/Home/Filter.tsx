@@ -16,7 +16,9 @@ import {
   IonSpinner,
 } from '@ionic/react';
 
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useTag } from '@/hooks/useTag';
+import { useUserTag } from '@/hooks/useUserTag';
 import { TagTypes } from '@/API';
 
 interface OwnProps {
@@ -53,6 +55,8 @@ const Filter: React.FC<FilterProps> = ({ onDismissModal }) => {
   const [selectedTags, setSelectedTags] = useState([] as any);
 
   const { listTagsByTypeName } = useTag();
+  const { listTagsByUserTag, createUserTag, deleteUserTag } = useUserTag();
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const fetchModalities = async () => {
     setLoading1(true);
@@ -112,11 +116,47 @@ const Filter: React.FC<FilterProps> = ({ onDismissModal }) => {
     fetchAreas();
   }, []);
 
-  const toggleTag = (tag: any) => {
+  useEffect(() => {
+    const fetchUserTags = async () => {
+      const l = await listTagsByUserTag({
+        userID: user.username as string,
+        limit: 1000,
+      });
+      const t = [] as any
+      l.items.map((tag: any) => {
+        t.push(tag.tagID)
+      });
+      setSelectedTags(t);
+    };
+    if (user && user.username) {
+      fetchUserTags();
+    }
+  }, [user]);
+
+  const toggleTag = async (tag: any) => {
     if (selectedTags.indexOf(tag.id) > -1) {
       setSelectedTags(selectedTags.filter((x: string) => x !== tag.id));
+      const l = await listTagsByUserTag({
+        userID: user.username as string,
+        tagID: { eq: tag.id },
+      });
+      l.items.map(async (i: any) => {
+        await deleteUserTag({
+          id: i.id,
+        });
+      });
     } else {
       setSelectedTags([...selectedTags, tag.id]);
+      const l = await listTagsByUserTag({
+        userID: user.username as string,
+        tagID: { eq: tag.id },
+      });
+      if (l.items.length === 0) {
+        await createUserTag({
+          tagID: tag.id,
+          userID: user.username as string,
+        });
+      }
     }
   };
 
@@ -128,10 +168,12 @@ const Filter: React.FC<FilterProps> = ({ onDismissModal }) => {
             <IonButton onClick={onDismissModal}>Cancelar</IonButton>
           </IonButtons>
 
-          <IonTitle>Filtro Tags</IonTitle>
+          <IonTitle>Tags do seu interesse</IonTitle>
 
           <IonButtons slot="end">
-            <IonButton onClick={onDismissModal} strong>
+            <IonButton
+              onClick={onDismissModal}
+            >
               OK
             </IonButton>
           </IonButtons>

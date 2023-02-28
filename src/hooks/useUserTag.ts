@@ -7,8 +7,8 @@ import * as mutations from '@/graphql/mutations';
 import {
   CreateUserTagInput,
   DeleteUserTagInput,
-  ListUsersByTagQueryVariables,
-  ListTagsByUserQueryVariables,
+  ListUsersByTagUserQueryVariables,
+  ListTagsByUserTagQueryVariables,
 } from '@/API';
 
 export const useUserTag = () => {
@@ -28,26 +28,26 @@ export const useUserTag = () => {
     });
   };
 
-  const listUsersByTag = async (variables: ListUsersByTagQueryVariables) => {
+  const listUsersByTagUser = async (variables: ListUsersByTagUserQueryVariables) => {
     const {
       data: {
-        listUsersByTag: { items, nextToken },
+        listUsersByTagUser: { items, nextToken },
       },
     } = (await API.graphql({
-      query: queries.listUsersByTag,
+      query: queries.listUsersByTagUser,
       variables,
       authMode: GRAPHQL_AUTH_MODE.API_KEY,
     })) as GraphQLResult<any>;
     return { items, nextToken };
   };
 
-  const listTagsByUser = async (variables: ListTagsByUserQueryVariables) => {
+  const listTagsByUserTag = async (variables: ListTagsByUserTagQueryVariables) => {
     const {
       data: {
-        listTagsByUser: { items, nextToken },
+        listTagsByUserTag: { items, nextToken },
       },
     } = (await API.graphql({
-      query: queries.listTagsByUser,
+      query: queries.listTagsByUserTag,
       variables,
       authMode: GRAPHQL_AUTH_MODE.API_KEY,
     })) as GraphQLResult<any>;
@@ -57,7 +57,7 @@ export const useUserTag = () => {
   return {
     createUserTag,
     deleteUserTag,
-    listUsersByTag,
-    listTagsByUser
+    listUsersByTagUser,
+    listTagsByUserTag
   };
 };

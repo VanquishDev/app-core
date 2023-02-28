@@ -5,6 +5,7 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { usePost } from '@/hooks/usePost';
 import { useTag } from '@/hooks/useTag';
 import { TagTypes } from '@/API';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 import {
   IonHeader,

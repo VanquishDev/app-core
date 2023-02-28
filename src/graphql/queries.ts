@@ -601,16 +601,18 @@ export const listGroupsByUserGroup = /* GraphQL */ `
     }
   }
 `;
-export const listUsersByTag = /* GraphQL */ `
-  query ListUsersByTag(
+export const listUsersByTagUser = /* GraphQL */ `
+  query ListUsersByTagUser(
     $tagID: ID!
+    $userID: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelUserTagFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUsersByTag(
+    listUsersByTagUser(
       tagID: $tagID
+      userID: $userID
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit
@@ -647,16 +649,18 @@ export const listUsersByTag = /* GraphQL */ `
     }
   }
 `;
-export const listTagsByUser = /* GraphQL */ `
-  query ListTagsByUser(
+export const listTagsByUserTag = /* GraphQL */ `
+  query ListTagsByUserTag(
     $userID: ID!
+    $tagID: ModelIDKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelUserTagFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listTagsByUser(
+    listTagsByUserTag(
       userID: $userID
+      tagID: $tagID
       sortDirection: $sortDirection
       filter: $filter
       limit: $limit

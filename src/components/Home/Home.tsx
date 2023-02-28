@@ -222,9 +222,9 @@ const App: React.FC = () => {
               <IonRefresherContent />
             </IonRefresher>
 
-            <IonList>
+            {segment === 'all' && <IonList>
               {items.map((item, index) => (
-                <div key={item}>
+                <div key={index}>
                   <div className="flex justify-center px-4 py-2">
                     <div style={{ maxWidth: 720 }} className="w-full">
                       <ItemVideo item={item} />
@@ -232,7 +232,7 @@ const App: React.FC = () => {
                   </div>
                 </div>
               ))}
-            </IonList>
+            </IonList>}
 
             <IonInfiniteScroll
               onIonInfinite={(ev) => {
