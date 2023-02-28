@@ -86,7 +86,7 @@ const Capture: React.FC<CaptureProps> = ({ onDismissModal }) => {
   }, [loaded]);
 
   return (
-    <>
+    <div >
       <IonHeader translucent={true}>
         <IonToolbar>
           <IonButtons slot="start">
@@ -125,7 +125,8 @@ const Capture: React.FC<CaptureProps> = ({ onDismissModal }) => {
             style={{
               display: 'block',
               width: '100%',
-              backgroundImage: `url("/pacs_station.jpg")`
+              height: 500,
+              backgroundImage: `url("/pacs_station.jpg")`,
             }}
           >
             <h1 style={{ textAlign: 'center' }}>
@@ -134,7 +135,7 @@ const Capture: React.FC<CaptureProps> = ({ onDismissModal }) => {
           </lav-recorder>
         </div>
       </IonContent>
-    </>
+    </div>
   );
 };
 
