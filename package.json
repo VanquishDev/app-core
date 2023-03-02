@@ -16,7 +16,7 @@
     "ionic:serve": "npm run start",
     "clean": "rimraf node_modules; rimraf .next; rm -f yarn-error.log; rm -f yarn.lock",
     "clean:next": "rimraf .next;",
-    "amplify:export": "amplify export --out ../cdk-stack/lib"
+    "amplify:export": "amplify export --out ../app-core-cdk/lib"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.9",
