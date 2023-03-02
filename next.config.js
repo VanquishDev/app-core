@@ -13,11 +13,11 @@ const nextConfig = {
     userPoolClientId: process.env.userPoolClientId,
     userPoolRegion: process.env.userPoolRegion,
     identityPoolId: process.env.identityPoolId,
-    graphqlURL: process.env.graphqlURL,
-    graphqlApiKey: process.env.graphqlApiKey,
     bucketName: process.env.bucketName,
     bucketRegion: process.env.bucketRegion,
     bucketCloudFront: process.env.bucketCloudFront,
+    graphqlURL: process.env.graphqlURL,
+    graphqlApiKey: process.env.graphqlApiKey,
     tagTypes: ["MODALITIES", "SPECIALTIES", "REGIONS", "GROUPS", "AREAS"]
   }
 }
