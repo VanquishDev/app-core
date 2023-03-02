@@ -43,7 +43,6 @@ export const createUser = /* GraphQL */ `
         birthDay
         notes
         allowCookiesPreference
-        allowCookiesStatistic
         createdAt
         updatedAt
       }
@@ -95,13 +94,13 @@ export const createUser = /* GraphQL */ `
       posts {
         items {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -164,7 +163,6 @@ export const updateUser = /* GraphQL */ `
         birthDay
         notes
         allowCookiesPreference
-        allowCookiesStatistic
         createdAt
         updatedAt
       }
@@ -216,13 +214,13 @@ export const updateUser = /* GraphQL */ `
       posts {
         items {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -285,7 +283,6 @@ export const deleteUser = /* GraphQL */ `
         birthDay
         notes
         allowCookiesPreference
-        allowCookiesStatistic
         createdAt
         updatedAt
       }
@@ -337,13 +334,13 @@ export const deleteUser = /* GraphQL */ `
       posts {
         items {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -396,7 +393,6 @@ export const createProfile = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -429,7 +425,6 @@ export const createProfile = /* GraphQL */ `
       birthDay
       notes
       allowCookiesPreference
-      allowCookiesStatistic
       createdAt
       updatedAt
     }
@@ -466,7 +461,6 @@ export const updateProfile = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -499,7 +493,6 @@ export const updateProfile = /* GraphQL */ `
       birthDay
       notes
       allowCookiesPreference
-      allowCookiesStatistic
       createdAt
       updatedAt
     }
@@ -536,7 +529,6 @@ export const deleteProfile = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -569,7 +561,6 @@ export const deleteProfile = /* GraphQL */ `
       birthDay
       notes
       allowCookiesPreference
-      allowCookiesStatistic
       createdAt
       updatedAt
     }
@@ -608,7 +599,6 @@ export const createUserGroup = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -667,7 +657,6 @@ export const deleteUserGroup = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -734,7 +723,6 @@ export const createUserTag = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -801,7 +789,6 @@ export const deleteUserTag = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1045,7 +1032,6 @@ export const createLog = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1218,6 +1204,411 @@ export const deleteNotify = /* GraphQL */ `
     }
   }
 `;
+export const createMenu = /* GraphQL */ `
+  mutation CreateMenu(
+    $input: CreateMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    createMenu(input: $input, condition: $condition) {
+      id
+      alias
+      name
+      description
+      order
+      orderDesc
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      showDescriptionPage
+      showThumbnailPage
+      hide
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMenu = /* GraphQL */ `
+  mutation UpdateMenu(
+    $input: UpdateMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    updateMenu(input: $input, condition: $condition) {
+      id
+      alias
+      name
+      description
+      order
+      orderDesc
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      showDescriptionPage
+      showThumbnailPage
+      hide
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMenu = /* GraphQL */ `
+  mutation DeleteMenu(
+    $input: DeleteMenuInput!
+    $condition: ModelMenuConditionInput
+  ) {
+    deleteMenu(input: $input, condition: $condition) {
+      id
+      alias
+      name
+      description
+      order
+      orderDesc
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      showDescriptionPage
+      showThumbnailPage
+      hide
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createPage = /* GraphQL */ `
+  mutation CreatePage(
+    $input: CreatePageInput!
+    $condition: ModelPageConditionInput
+  ) {
+    createPage(input: $input, condition: $condition) {
+      id
+      alias
+      status
+      menuID
+      menu {
+        id
+        alias
+        name
+        description
+        order
+        orderDesc
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        showDescriptionPage
+        showThumbnailPage
+        hide
+        createdAt
+        updatedAt
+      }
+      order
+      title
+      description
+      content
+      tags
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      changeFreq
+      priority
+      hide
+      search
+      createdAt
+      components {
+        items {
+          id
+          pageID
+          order
+          component
+          content
+          config
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const updatePage = /* GraphQL */ `
+  mutation UpdatePage(
+    $input: UpdatePageInput!
+    $condition: ModelPageConditionInput
+  ) {
+    updatePage(input: $input, condition: $condition) {
+      id
+      alias
+      status
+      menuID
+      menu {
+        id
+        alias
+        name
+        description
+        order
+        orderDesc
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        showDescriptionPage
+        showThumbnailPage
+        hide
+        createdAt
+        updatedAt
+      }
+      order
+      title
+      description
+      content
+      tags
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      changeFreq
+      priority
+      hide
+      search
+      createdAt
+      components {
+        items {
+          id
+          pageID
+          order
+          component
+          content
+          config
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const deletePage = /* GraphQL */ `
+  mutation DeletePage(
+    $input: DeletePageInput!
+    $condition: ModelPageConditionInput
+  ) {
+    deletePage(input: $input, condition: $condition) {
+      id
+      alias
+      status
+      menuID
+      menu {
+        id
+        alias
+        name
+        description
+        order
+        orderDesc
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        showDescriptionPage
+        showThumbnailPage
+        hide
+        createdAt
+        updatedAt
+      }
+      order
+      title
+      description
+      content
+      tags
+      thumbnail
+      thumbnailSrc
+      thumbnailCropper
+      changeFreq
+      priority
+      hide
+      search
+      createdAt
+      components {
+        items {
+          id
+          pageID
+          order
+          component
+          content
+          config
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      updatedAt
+    }
+  }
+`;
+export const createComponent = /* GraphQL */ `
+  mutation CreateComponent(
+    $input: CreateComponentInput!
+    $condition: ModelComponentConditionInput
+  ) {
+    createComponent(input: $input, condition: $condition) {
+      id
+      pageID
+      order
+      component
+      content
+      config
+      page {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateComponent = /* GraphQL */ `
+  mutation UpdateComponent(
+    $input: UpdateComponentInput!
+    $condition: ModelComponentConditionInput
+  ) {
+    updateComponent(input: $input, condition: $condition) {
+      id
+      pageID
+      order
+      component
+      content
+      config
+      page {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteComponent = /* GraphQL */ `
+  mutation DeleteComponent(
+    $input: DeleteComponentInput!
+    $condition: ModelComponentConditionInput
+  ) {
+    deleteComponent(input: $input, condition: $condition) {
+      id
+      pageID
+      order
+      component
+      content
+      config
+      page {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createPost = /* GraphQL */ `
   mutation CreatePost(
     $input: CreatePostInput!
@@ -1225,13 +1616,13 @@ export const createPost = /* GraphQL */ `
   ) {
     createPost(input: $input, condition: $condition) {
       id
-      type
       title
       description
       content
-      vimeoCode
-      videoKey
       thumbnail
+      videoProvider
+      video
+      search
       createdAt
       userID
       user {
@@ -1258,7 +1649,6 @@ export const createPost = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1311,13 +1701,13 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
-      type
       title
       description
       content
-      vimeoCode
-      videoKey
       thumbnail
+      videoProvider
+      video
+      search
       createdAt
       userID
       user {
@@ -1344,7 +1734,6 @@ export const updatePost = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1397,13 +1786,13 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
-      type
       title
       description
       content
-      vimeoCode
-      videoKey
       thumbnail
+      videoProvider
+      video
+      search
       createdAt
       userID
       user {
@@ -1430,7 +1819,6 @@ export const deletePost = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1486,13 +1874,13 @@ export const createPostTag = /* GraphQL */ `
       postID
       post {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1539,13 +1927,13 @@ export const deletePostTag = /* GraphQL */ `
       postID
       post {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1592,13 +1980,13 @@ export const createComment = /* GraphQL */ `
       postID
       post {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1646,7 +2034,6 @@ export const createComment = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1683,13 +2070,13 @@ export const updateComment = /* GraphQL */ `
       postID
       post {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1737,7 +2124,6 @@ export const updateComment = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -1774,13 +2160,13 @@ export const deleteComment = /* GraphQL */ `
       postID
       post {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1828,7 +2214,6 @@ export const deleteComment = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }

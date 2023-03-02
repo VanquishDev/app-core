@@ -123,7 +123,6 @@ export type Profile = {
   birthDay?: string | null,
   notes?: string | null,
   allowCookiesPreference?: boolean | null,
-  allowCookiesStatistic?: boolean | null,
   createdAt: string,
   updatedAt: string,
 };
@@ -179,20 +178,11 @@ export type Tag = {
   __typename: "Tag",
   id: string,
   name: string,
-  type: TagTypes,
+  type: string,
   status: TagStatus,
   createdAt: string,
   updatedAt: string,
 };
-
-export enum TagTypes {
-  MODALITIES = "MODALITIES",
-  SPECIALTIES = "SPECIALTIES",
-  REGIONS = "REGIONS",
-  GROUPS = "GROUPS",
-  AREAS = "AREAS",
-}
-
 
 export enum TagStatus {
   ON = "ON",
@@ -240,13 +230,13 @@ export type ModelPostConnection = {
 export type Post = {
   __typename: "Post",
   id: string,
-  type: PostProviders,
   title: string,
   description?: string | null,
   content?: string | null,
-  vimeoCode?: string | null,
-  videoKey?: string | null,
   thumbnail?: string | null,
+  videoProvider?: VideoProviders | null,
+  video?: string | null,
+  search?: string | null,
   createdAt?: string | null,
   userID: string,
   user?: User | null,
@@ -255,9 +245,11 @@ export type Post = {
   updatedAt: string,
 };
 
-export enum PostProviders {
+export enum VideoProviders {
+  AWS_S3 = "AWS_S3",
+  AWS_VDO = "AWS_VDO",
   VIMEO = "VIMEO",
-  S3 = "S3",
+  YOUTUBE = "YOUTUBE",
 }
 
 
@@ -326,7 +318,6 @@ export type CreateProfileInput = {
   birthDay?: string | null,
   notes?: string | null,
   allowCookiesPreference?: boolean | null,
-  allowCookiesStatistic?: boolean | null,
 };
 
 export type ModelProfileConditionInput = {
@@ -342,7 +333,6 @@ export type ModelProfileConditionInput = {
   birthDay?: ModelStringInput | null,
   notes?: ModelStringInput | null,
   allowCookiesPreference?: ModelBooleanInput | null,
-  allowCookiesStatistic?: ModelBooleanInput | null,
   and?: Array< ModelProfileConditionInput | null > | null,
   or?: Array< ModelProfileConditionInput | null > | null,
   not?: ModelProfileConditionInput | null,
@@ -372,7 +362,6 @@ export type UpdateProfileInput = {
   birthDay?: string | null,
   notes?: string | null,
   allowCookiesPreference?: boolean | null,
-  allowCookiesStatistic?: boolean | null,
 };
 
 export type DeleteProfileInput = {
@@ -434,22 +423,17 @@ export type DeleteUserTagInput = {
 export type CreateTagInput = {
   id?: string | null,
   name: string,
-  type: TagTypes,
+  type: string,
   status: TagStatus,
 };
 
 export type ModelTagConditionInput = {
   name?: ModelStringInput | null,
-  type?: ModelTagTypesInput | null,
+  type?: ModelStringInput | null,
   status?: ModelTagStatusInput | null,
   and?: Array< ModelTagConditionInput | null > | null,
   or?: Array< ModelTagConditionInput | null > | null,
   not?: ModelTagConditionInput | null,
-};
-
-export type ModelTagTypesInput = {
-  eq?: TagTypes | null,
-  ne?: TagTypes | null,
 };
 
 export type ModelTagStatusInput = {
@@ -460,7 +444,7 @@ export type ModelTagStatusInput = {
 export type UpdateTagInput = {
   id: string,
   name?: string | null,
-  type?: TagTypes | null,
+  type?: string | null,
   status?: TagStatus | null,
 };
 
@@ -766,10 +750,6 @@ export enum MidiaTypes {
   VIDEO = "VIDEO",
   IMAGE = "IMAGE",
   PDF = "PDF",
-  DOC = "DOC",
-  XLS = "XLS",
-  FILE = "FILE",
-  ZIP = "ZIP",
 }
 
 
@@ -855,27 +835,265 @@ export type DeleteNotifyInput = {
   id: string,
 };
 
-export type CreatePostInput = {
+export type CreateMenuInput = {
   id?: string | null,
-  type: PostProviders,
+  alias: string,
+  name: string,
+  description?: string | null,
+  order: number,
+  orderDesc?: boolean | null,
+  thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  showDescriptionPage?: string | null,
+  showThumbnailPage?: string | null,
+  hide?: boolean | null,
+};
+
+export type ModelMenuConditionInput = {
+  alias?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  order?: ModelIntInput | null,
+  orderDesc?: ModelBooleanInput | null,
+  thumbnail?: ModelStringInput | null,
+  thumbnailSrc?: ModelStringInput | null,
+  thumbnailCropper?: ModelStringInput | null,
+  showDescriptionPage?: ModelStringInput | null,
+  showThumbnailPage?: ModelStringInput | null,
+  hide?: ModelBooleanInput | null,
+  and?: Array< ModelMenuConditionInput | null > | null,
+  or?: Array< ModelMenuConditionInput | null > | null,
+  not?: ModelMenuConditionInput | null,
+};
+
+export type Menu = {
+  __typename: "Menu",
+  id: string,
+  alias: string,
+  name: string,
+  description?: string | null,
+  order: number,
+  orderDesc?: boolean | null,
+  thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  showDescriptionPage?: string | null,
+  showThumbnailPage?: string | null,
+  hide?: boolean | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdateMenuInput = {
+  id: string,
+  alias?: string | null,
+  name?: string | null,
+  description?: string | null,
+  order?: number | null,
+  orderDesc?: boolean | null,
+  thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  showDescriptionPage?: string | null,
+  showThumbnailPage?: string | null,
+  hide?: boolean | null,
+};
+
+export type DeleteMenuInput = {
+  id: string,
+};
+
+export type CreatePageInput = {
+  id?: string | null,
+  alias: string,
+  status: PageStatus,
+  menuID: string,
+  order: number,
   title: string,
   description?: string | null,
   content?: string | null,
-  vimeoCode?: string | null,
-  videoKey?: string | null,
+  tags?: Array< string | null > | null,
   thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  changeFreq?: PageChangeFreq | null,
+  priority?: number | null,
+  hide?: boolean | null,
+  search?: string | null,
+  createdAt?: string | null,
+};
+
+export enum PageStatus {
+  ON = "ON",
+  OFF = "OFF",
+}
+
+
+export enum PageChangeFreq {
+  NEVER = "NEVER",
+  YEARLY = "YEARLY",
+  MONTHLY = "MONTHLY",
+  WEEKLY = "WEEKLY",
+  DAILY = "DAILY",
+  HOURLY = "HOURLY",
+  ALWAYS = "ALWAYS",
+}
+
+
+export type ModelPageConditionInput = {
+  alias?: ModelStringInput | null,
+  status?: ModelPageStatusInput | null,
+  menuID?: ModelIDInput | null,
+  order?: ModelIntInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  tags?: ModelStringInput | null,
+  thumbnail?: ModelStringInput | null,
+  thumbnailSrc?: ModelStringInput | null,
+  thumbnailCropper?: ModelStringInput | null,
+  changeFreq?: ModelPageChangeFreqInput | null,
+  priority?: ModelIntInput | null,
+  hide?: ModelBooleanInput | null,
+  search?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelPageConditionInput | null > | null,
+  or?: Array< ModelPageConditionInput | null > | null,
+  not?: ModelPageConditionInput | null,
+};
+
+export type ModelPageStatusInput = {
+  eq?: PageStatus | null,
+  ne?: PageStatus | null,
+};
+
+export type ModelPageChangeFreqInput = {
+  eq?: PageChangeFreq | null,
+  ne?: PageChangeFreq | null,
+};
+
+export type Page = {
+  __typename: "Page",
+  id: string,
+  alias: string,
+  status: PageStatus,
+  menuID: string,
+  menu?: Menu | null,
+  order: number,
+  title: string,
+  description?: string | null,
+  content?: string | null,
+  tags?: Array< string | null > | null,
+  thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  changeFreq?: PageChangeFreq | null,
+  priority?: number | null,
+  hide?: boolean | null,
+  search?: string | null,
+  createdAt?: string | null,
+  components?: ModelComponentConnection | null,
+  updatedAt: string,
+};
+
+export type ModelComponentConnection = {
+  __typename: "ModelComponentConnection",
+  items:  Array<Component | null >,
+  nextToken?: string | null,
+};
+
+export type Component = {
+  __typename: "Component",
+  id: string,
+  pageID: string,
+  order: number,
+  component: string,
+  content: string,
+  config?: string | null,
+  page?: Page | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type UpdatePageInput = {
+  id: string,
+  alias?: string | null,
+  status?: PageStatus | null,
+  menuID?: string | null,
+  order?: number | null,
+  title?: string | null,
+  description?: string | null,
+  content?: string | null,
+  tags?: Array< string | null > | null,
+  thumbnail?: string | null,
+  thumbnailSrc?: string | null,
+  thumbnailCropper?: string | null,
+  changeFreq?: PageChangeFreq | null,
+  priority?: number | null,
+  hide?: boolean | null,
+  search?: string | null,
+  createdAt?: string | null,
+};
+
+export type DeletePageInput = {
+  id: string,
+};
+
+export type CreateComponentInput = {
+  id?: string | null,
+  pageID: string,
+  order: number,
+  component: string,
+  content: string,
+  config?: string | null,
+};
+
+export type ModelComponentConditionInput = {
+  pageID?: ModelIDInput | null,
+  order?: ModelIntInput | null,
+  component?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  config?: ModelStringInput | null,
+  and?: Array< ModelComponentConditionInput | null > | null,
+  or?: Array< ModelComponentConditionInput | null > | null,
+  not?: ModelComponentConditionInput | null,
+};
+
+export type UpdateComponentInput = {
+  id: string,
+  pageID?: string | null,
+  order?: number | null,
+  component?: string | null,
+  content?: string | null,
+  config?: string | null,
+};
+
+export type DeleteComponentInput = {
+  id: string,
+};
+
+export type CreatePostInput = {
+  id?: string | null,
+  title: string,
+  description?: string | null,
+  content?: string | null,
+  thumbnail?: string | null,
+  videoProvider?: VideoProviders | null,
+  video?: string | null,
+  search?: string | null,
   createdAt?: string | null,
   userID: string,
 };
 
 export type ModelPostConditionInput = {
-  type?: ModelPostProvidersInput | null,
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   content?: ModelStringInput | null,
-  vimeoCode?: ModelStringInput | null,
-  videoKey?: ModelStringInput | null,
   thumbnail?: ModelStringInput | null,
+  videoProvider?: ModelVideoProvidersInput | null,
+  video?: ModelStringInput | null,
+  search?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   userID?: ModelIDInput | null,
   and?: Array< ModelPostConditionInput | null > | null,
@@ -883,20 +1101,20 @@ export type ModelPostConditionInput = {
   not?: ModelPostConditionInput | null,
 };
 
-export type ModelPostProvidersInput = {
-  eq?: PostProviders | null,
-  ne?: PostProviders | null,
+export type ModelVideoProvidersInput = {
+  eq?: VideoProviders | null,
+  ne?: VideoProviders | null,
 };
 
 export type UpdatePostInput = {
   id: string,
-  type?: PostProviders | null,
   title?: string | null,
   description?: string | null,
   content?: string | null,
-  vimeoCode?: string | null,
-  videoKey?: string | null,
   thumbnail?: string | null,
+  videoProvider?: VideoProviders | null,
+  video?: string | null,
+  search?: string | null,
   createdAt?: string | null,
   userID?: string | null,
 };
@@ -956,7 +1174,7 @@ export type DeleteCommentInput = {
 export type ModelTagFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
-  type?: ModelTagTypesInput | null,
+  type?: ModelStringInput | null,
   status?: ModelTagStatusInput | null,
   and?: Array< ModelTagFilterInput | null > | null,
   or?: Array< ModelTagFilterInput | null > | null,
@@ -1017,6 +1235,30 @@ export type ModelMidiaConnection = {
   nextToken?: string | null,
 };
 
+export type ModelMenuFilterInput = {
+  id?: ModelIDInput | null,
+  alias?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  order?: ModelIntInput | null,
+  orderDesc?: ModelBooleanInput | null,
+  thumbnail?: ModelStringInput | null,
+  thumbnailSrc?: ModelStringInput | null,
+  thumbnailCropper?: ModelStringInput | null,
+  showDescriptionPage?: ModelStringInput | null,
+  showThumbnailPage?: ModelStringInput | null,
+  hide?: ModelBooleanInput | null,
+  and?: Array< ModelMenuFilterInput | null > | null,
+  or?: Array< ModelMenuFilterInput | null > | null,
+  not?: ModelMenuFilterInput | null,
+};
+
+export type ModelMenuConnection = {
+  __typename: "ModelMenuConnection",
+  items:  Array<Menu | null >,
+  nextToken?: string | null,
+};
+
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -1062,7 +1304,6 @@ export type ModelProfileFilterInput = {
   birthDay?: ModelStringInput | null,
   notes?: ModelStringInput | null,
   allowCookiesPreference?: ModelBooleanInput | null,
-  allowCookiesStatistic?: ModelBooleanInput | null,
   and?: Array< ModelProfileFilterInput | null > | null,
   or?: Array< ModelProfileFilterInput | null > | null,
   not?: ModelProfileFilterInput | null,
@@ -1194,15 +1435,95 @@ export type ModelNotifyConnection = {
   nextToken?: string | null,
 };
 
-export type ModelPostFilterInput = {
+export type ModelPageFilterInput = {
   id?: ModelIDInput | null,
-  type?: ModelPostProvidersInput | null,
+  alias?: ModelStringInput | null,
+  status?: ModelPageStatusInput | null,
+  menuID?: ModelIDInput | null,
+  order?: ModelIntInput | null,
   title?: ModelStringInput | null,
   description?: ModelStringInput | null,
   content?: ModelStringInput | null,
-  vimeoCode?: ModelStringInput | null,
-  videoKey?: ModelStringInput | null,
+  tags?: ModelStringInput | null,
   thumbnail?: ModelStringInput | null,
+  thumbnailSrc?: ModelStringInput | null,
+  thumbnailCropper?: ModelStringInput | null,
+  changeFreq?: ModelPageChangeFreqInput | null,
+  priority?: ModelIntInput | null,
+  hide?: ModelBooleanInput | null,
+  search?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelPageFilterInput | null > | null,
+  or?: Array< ModelPageFilterInput | null > | null,
+  not?: ModelPageFilterInput | null,
+};
+
+export type ModelPageConnection = {
+  __typename: "ModelPageConnection",
+  items:  Array<Page | null >,
+  nextToken?: string | null,
+};
+
+export type ModelPagePagesByStatusMenuOrderCompositeKeyConditionInput = {
+  eq?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+  le?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+  lt?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+  ge?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+  gt?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+  between?: Array< ModelPagePagesByStatusMenuOrderCompositeKeyInput | null > | null,
+  beginsWith?: ModelPagePagesByStatusMenuOrderCompositeKeyInput | null,
+};
+
+export type ModelPagePagesByStatusMenuOrderCompositeKeyInput = {
+  menuID?: string | null,
+  order?: number | null,
+};
+
+export type ModelPagePagesByStatusMenuTitleCompositeKeyConditionInput = {
+  eq?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+  le?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+  lt?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+  ge?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+  gt?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+  between?: Array< ModelPagePagesByStatusMenuTitleCompositeKeyInput | null > | null,
+  beginsWith?: ModelPagePagesByStatusMenuTitleCompositeKeyInput | null,
+};
+
+export type ModelPagePagesByStatusMenuTitleCompositeKeyInput = {
+  menuID?: string | null,
+  title?: string | null,
+};
+
+export type ModelIntKeyConditionInput = {
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
+export type ModelComponentFilterInput = {
+  id?: ModelIDInput | null,
+  pageID?: ModelIDInput | null,
+  order?: ModelIntInput | null,
+  component?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  config?: ModelStringInput | null,
+  and?: Array< ModelComponentFilterInput | null > | null,
+  or?: Array< ModelComponentFilterInput | null > | null,
+  not?: ModelComponentFilterInput | null,
+};
+
+export type ModelPostFilterInput = {
+  id?: ModelIDInput | null,
+  title?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  content?: ModelStringInput | null,
+  thumbnail?: ModelStringInput | null,
+  videoProvider?: ModelVideoProvidersInput | null,
+  video?: ModelStringInput | null,
+  search?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   userID?: ModelIDInput | null,
   and?: Array< ModelPostFilterInput | null > | null,
@@ -1275,7 +1596,6 @@ export type CreateUserMutation = {
       birthDay?: string | null,
       notes?: string | null,
       allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1335,13 +1655,13 @@ export type CreateUserMutation = {
       items:  Array< {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -1410,7 +1730,6 @@ export type UpdateUserMutation = {
       birthDay?: string | null,
       notes?: string | null,
       allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1470,13 +1789,13 @@ export type UpdateUserMutation = {
       items:  Array< {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -1545,7 +1864,6 @@ export type DeleteUserMutation = {
       birthDay?: string | null,
       notes?: string | null,
       allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -1605,13 +1923,13 @@ export type DeleteUserMutation = {
       items:  Array< {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -1670,7 +1988,6 @@ export type CreateProfileMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1708,7 +2025,6 @@ export type CreateProfileMutation = {
     birthDay?: string | null,
     notes?: string | null,
     allowCookiesPreference?: boolean | null,
-    allowCookiesStatistic?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1749,7 +2065,6 @@ export type UpdateProfileMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1787,7 +2102,6 @@ export type UpdateProfileMutation = {
     birthDay?: string | null,
     notes?: string | null,
     allowCookiesPreference?: boolean | null,
-    allowCookiesStatistic?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1828,7 +2142,6 @@ export type DeleteProfileMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1866,7 +2179,6 @@ export type DeleteProfileMutation = {
     birthDay?: string | null,
     notes?: string | null,
     allowCookiesPreference?: boolean | null,
-    allowCookiesStatistic?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -1909,7 +2221,6 @@ export type CreateUserGroupMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -1977,7 +2288,6 @@ export type DeleteUserGroupMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2022,7 +2332,7 @@ export type CreateUserTagMutation = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -2054,7 +2364,6 @@ export type CreateUserTagMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2099,7 +2408,7 @@ export type DeleteUserTagMutation = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -2131,7 +2440,6 @@ export type DeleteUserTagMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2172,7 +2480,7 @@ export type CreateTagMutation = {
     __typename: "Tag",
     id: string,
     name: string,
-    type: TagTypes,
+    type: string,
     status: TagStatus,
     createdAt: string,
     updatedAt: string,
@@ -2189,7 +2497,7 @@ export type UpdateTagMutation = {
     __typename: "Tag",
     id: string,
     name: string,
-    type: TagTypes,
+    type: string,
     status: TagStatus,
     createdAt: string,
     updatedAt: string,
@@ -2206,7 +2514,7 @@ export type DeleteTagMutation = {
     __typename: "Tag",
     id: string,
     name: string,
-    type: TagTypes,
+    type: string,
     status: TagStatus,
     createdAt: string,
     updatedAt: string,
@@ -2402,7 +2710,6 @@ export type CreateLogMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2594,6 +2901,447 @@ export type DeleteNotifyMutation = {
   } | null,
 };
 
+export type CreateMenuMutationVariables = {
+  input: CreateMenuInput,
+  condition?: ModelMenuConditionInput | null,
+};
+
+export type CreateMenuMutation = {
+  createMenu?:  {
+    __typename: "Menu",
+    id: string,
+    alias: string,
+    name: string,
+    description?: string | null,
+    order: number,
+    orderDesc?: boolean | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    showDescriptionPage?: string | null,
+    showThumbnailPage?: string | null,
+    hide?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateMenuMutationVariables = {
+  input: UpdateMenuInput,
+  condition?: ModelMenuConditionInput | null,
+};
+
+export type UpdateMenuMutation = {
+  updateMenu?:  {
+    __typename: "Menu",
+    id: string,
+    alias: string,
+    name: string,
+    description?: string | null,
+    order: number,
+    orderDesc?: boolean | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    showDescriptionPage?: string | null,
+    showThumbnailPage?: string | null,
+    hide?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteMenuMutationVariables = {
+  input: DeleteMenuInput,
+  condition?: ModelMenuConditionInput | null,
+};
+
+export type DeleteMenuMutation = {
+  deleteMenu?:  {
+    __typename: "Menu",
+    id: string,
+    alias: string,
+    name: string,
+    description?: string | null,
+    order: number,
+    orderDesc?: boolean | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    showDescriptionPage?: string | null,
+    showThumbnailPage?: string | null,
+    hide?: boolean | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreatePageMutationVariables = {
+  input: CreatePageInput,
+  condition?: ModelPageConditionInput | null,
+};
+
+export type CreatePageMutation = {
+  createPage?:  {
+    __typename: "Page",
+    id: string,
+    alias: string,
+    status: PageStatus,
+    menuID: string,
+    menu?:  {
+      __typename: "Menu",
+      id: string,
+      alias: string,
+      name: string,
+      description?: string | null,
+      order: number,
+      orderDesc?: boolean | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      showDescriptionPage?: string | null,
+      showThumbnailPage?: string | null,
+      hide?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    order: number,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    tags?: Array< string | null > | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    changeFreq?: PageChangeFreq | null,
+    priority?: number | null,
+    hide?: boolean | null,
+    search?: string | null,
+    createdAt?: string | null,
+    components?:  {
+      __typename: "ModelComponentConnection",
+      items:  Array< {
+        __typename: "Component",
+        id: string,
+        pageID: string,
+        order: number,
+        component: string,
+        content: string,
+        config?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdatePageMutationVariables = {
+  input: UpdatePageInput,
+  condition?: ModelPageConditionInput | null,
+};
+
+export type UpdatePageMutation = {
+  updatePage?:  {
+    __typename: "Page",
+    id: string,
+    alias: string,
+    status: PageStatus,
+    menuID: string,
+    menu?:  {
+      __typename: "Menu",
+      id: string,
+      alias: string,
+      name: string,
+      description?: string | null,
+      order: number,
+      orderDesc?: boolean | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      showDescriptionPage?: string | null,
+      showThumbnailPage?: string | null,
+      hide?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    order: number,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    tags?: Array< string | null > | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    changeFreq?: PageChangeFreq | null,
+    priority?: number | null,
+    hide?: boolean | null,
+    search?: string | null,
+    createdAt?: string | null,
+    components?:  {
+      __typename: "ModelComponentConnection",
+      items:  Array< {
+        __typename: "Component",
+        id: string,
+        pageID: string,
+        order: number,
+        component: string,
+        content: string,
+        config?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeletePageMutationVariables = {
+  input: DeletePageInput,
+  condition?: ModelPageConditionInput | null,
+};
+
+export type DeletePageMutation = {
+  deletePage?:  {
+    __typename: "Page",
+    id: string,
+    alias: string,
+    status: PageStatus,
+    menuID: string,
+    menu?:  {
+      __typename: "Menu",
+      id: string,
+      alias: string,
+      name: string,
+      description?: string | null,
+      order: number,
+      orderDesc?: boolean | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      showDescriptionPage?: string | null,
+      showThumbnailPage?: string | null,
+      hide?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null,
+    order: number,
+    title: string,
+    description?: string | null,
+    content?: string | null,
+    tags?: Array< string | null > | null,
+    thumbnail?: string | null,
+    thumbnailSrc?: string | null,
+    thumbnailCropper?: string | null,
+    changeFreq?: PageChangeFreq | null,
+    priority?: number | null,
+    hide?: boolean | null,
+    search?: string | null,
+    createdAt?: string | null,
+    components?:  {
+      __typename: "ModelComponentConnection",
+      items:  Array< {
+        __typename: "Component",
+        id: string,
+        pageID: string,
+        order: number,
+        component: string,
+        content: string,
+        config?: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null >,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateComponentMutationVariables = {
+  input: CreateComponentInput,
+  condition?: ModelComponentConditionInput | null,
+};
+
+export type CreateComponentMutation = {
+  createComponent?:  {
+    __typename: "Component",
+    id: string,
+    pageID: string,
+    order: number,
+    component: string,
+    content: string,
+    config?: string | null,
+    page?:  {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateComponentMutationVariables = {
+  input: UpdateComponentInput,
+  condition?: ModelComponentConditionInput | null,
+};
+
+export type UpdateComponentMutation = {
+  updateComponent?:  {
+    __typename: "Component",
+    id: string,
+    pageID: string,
+    order: number,
+    component: string,
+    content: string,
+    config?: string | null,
+    page?:  {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteComponentMutationVariables = {
+  input: DeleteComponentInput,
+  condition?: ModelComponentConditionInput | null,
+};
+
+export type DeleteComponentMutation = {
+  deleteComponent?:  {
+    __typename: "Component",
+    id: string,
+    pageID: string,
+    order: number,
+    component: string,
+    content: string,
+    config?: string | null,
+    page?:  {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreatePostMutationVariables = {
   input: CreatePostInput,
   condition?: ModelPostConditionInput | null,
@@ -2603,13 +3351,13 @@ export type CreatePostMutation = {
   createPost?:  {
     __typename: "Post",
     id: string,
-    type: PostProviders,
     title: string,
     description?: string | null,
     content?: string | null,
-    vimeoCode?: string | null,
-    videoKey?: string | null,
     thumbnail?: string | null,
+    videoProvider?: VideoProviders | null,
+    video?: string | null,
+    search?: string | null,
     createdAt?: string | null,
     userID: string,
     user?:  {
@@ -2638,7 +3386,6 @@ export type CreatePostMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2702,13 +3449,13 @@ export type UpdatePostMutation = {
   updatePost?:  {
     __typename: "Post",
     id: string,
-    type: PostProviders,
     title: string,
     description?: string | null,
     content?: string | null,
-    vimeoCode?: string | null,
-    videoKey?: string | null,
     thumbnail?: string | null,
+    videoProvider?: VideoProviders | null,
+    video?: string | null,
+    search?: string | null,
     createdAt?: string | null,
     userID: string,
     user?:  {
@@ -2737,7 +3484,6 @@ export type UpdatePostMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2801,13 +3547,13 @@ export type DeletePostMutation = {
   deletePost?:  {
     __typename: "Post",
     id: string,
-    type: PostProviders,
     title: string,
     description?: string | null,
     content?: string | null,
-    vimeoCode?: string | null,
-    videoKey?: string | null,
     thumbnail?: string | null,
+    videoProvider?: VideoProviders | null,
+    video?: string | null,
+    search?: string | null,
     createdAt?: string | null,
     userID: string,
     user?:  {
@@ -2836,7 +3582,6 @@ export type DeletePostMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -2904,13 +3649,13 @@ export type CreatePostTagMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -2941,7 +3686,7 @@ export type CreatePostTagMutation = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -2964,13 +3709,13 @@ export type DeletePostTagMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -3001,7 +3746,7 @@ export type DeletePostTagMutation = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -3024,13 +3769,13 @@ export type CreateCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -3083,7 +3828,6 @@ export type CreateCommentMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3128,13 +3872,13 @@ export type UpdateCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -3187,7 +3931,6 @@ export type UpdateCommentMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3232,13 +3975,13 @@ export type DeleteCommentMutation = {
     post?:  {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -3291,7 +4034,6 @@ export type DeleteCommentMutation = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3367,7 +4109,6 @@ export type GetUserQuery = {
       birthDay?: string | null,
       notes?: string | null,
       allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null,
@@ -3427,13 +4168,13 @@ export type GetUserQuery = {
       items:  Array< {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -3491,7 +4232,6 @@ export type GetProfileQuery = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3529,7 +4269,6 @@ export type GetProfileQuery = {
     birthDay?: string | null,
     notes?: string | null,
     allowCookiesPreference?: boolean | null,
-    allowCookiesStatistic?: boolean | null,
     createdAt: string,
     updatedAt: string,
   } | null,
@@ -3550,7 +4289,7 @@ export type ListTagsQuery = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -3617,6 +4356,38 @@ export type ListMidiasQuery = {
   } | null,
 };
 
+export type ListMenusQueryVariables = {
+  id?: string | null,
+  filter?: ModelMenuFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  sortDirection?: ModelSortDirection | null,
+};
+
+export type ListMenusQuery = {
+  listMenus?:  {
+    __typename: "ModelMenuConnection",
+    items:  Array< {
+      __typename: "Menu",
+      id: string,
+      alias: string,
+      name: string,
+      description?: string | null,
+      order: number,
+      orderDesc?: boolean | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      showDescriptionPage?: string | null,
+      showThumbnailPage?: string | null,
+      hide?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetUserByEmailQueryVariables = {
   email: string,
   sortDirection?: ModelSortDirection | null,
@@ -3654,7 +4425,6 @@ export type GetUserByEmailQuery = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3721,7 +4491,6 @@ export type GetUserByPhoneQuery = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3789,7 +4558,6 @@ export type ListUsersByStatusCreatedAtQuery = {
         birthDay?: string | null,
         notes?: string | null,
         allowCookiesPreference?: boolean | null,
-        allowCookiesStatistic?: boolean | null,
         createdAt: string,
         updatedAt: string,
       } | null,
@@ -3858,7 +4626,6 @@ export type ListUsersByBirthDayQuery = {
       birthDay?: string | null,
       notes?: string | null,
       allowCookiesPreference?: boolean | null,
-      allowCookiesStatistic?: boolean | null,
       createdAt: string,
       updatedAt: string,
     } | null >,
@@ -3960,7 +4727,7 @@ export type ListUsersByTagUserQuery = {
         __typename: "Tag",
         id: string,
         name: string,
-        type: TagTypes,
+        type: string,
         status: TagStatus,
         createdAt: string,
         updatedAt: string,
@@ -4006,7 +4773,7 @@ export type ListTagsByUserTagQuery = {
         __typename: "Tag",
         id: string,
         name: string,
-        type: TagTypes,
+        type: string,
         status: TagStatus,
         createdAt: string,
         updatedAt: string,
@@ -4033,7 +4800,7 @@ export type ListTagsByUserTagQuery = {
 };
 
 export type ListTagsByTypeNameQueryVariables = {
-  type: TagTypes,
+  type: string,
   name?: ModelStringKeyConditionInput | null,
   sortDirection?: ModelSortDirection | null,
   filter?: ModelTagFilterInput | null,
@@ -4048,7 +4815,7 @@ export type ListTagsByTypeNameQuery = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -4073,7 +4840,7 @@ export type ListTagsByStatusNameQuery = {
       __typename: "Tag",
       id: string,
       name: string,
-      type: TagTypes,
+      type: string,
       status: TagStatus,
       createdAt: string,
       updatedAt: string,
@@ -4253,6 +5020,259 @@ export type ListNotifyByUserCreatedAtQuery = {
   } | null,
 };
 
+export type ListMenuByAliasQueryVariables = {
+  alias: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelMenuFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListMenuByAliasQuery = {
+  listMenuByAlias?:  {
+    __typename: "ModelMenuConnection",
+    items:  Array< {
+      __typename: "Menu",
+      id: string,
+      alias: string,
+      name: string,
+      description?: string | null,
+      order: number,
+      orderDesc?: boolean | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      showDescriptionPage?: string | null,
+      showThumbnailPage?: string | null,
+      hide?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListPageByAliasQueryVariables = {
+  alias: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPageByAliasQuery = {
+  listPageByAlias?:  {
+    __typename: "ModelPageConnection",
+    items:  Array< {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListPagesByStatusMenuOrderQueryVariables = {
+  status: PageStatus,
+  menuIDOrder?: ModelPagePagesByStatusMenuOrderCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPagesByStatusMenuOrderQuery = {
+  listPagesByStatusMenuOrder?:  {
+    __typename: "ModelPageConnection",
+    items:  Array< {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListPagesByStatusMenuTitleQueryVariables = {
+  status: PageStatus,
+  menuIDTitle?: ModelPagePagesByStatusMenuTitleCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPagesByStatusMenuTitleQuery = {
+  listPagesByStatusMenuTitle?:  {
+    __typename: "ModelPageConnection",
+    items:  Array< {
+      __typename: "Page",
+      id: string,
+      alias: string,
+      status: PageStatus,
+      menuID: string,
+      menu?:  {
+        __typename: "Menu",
+        id: string,
+        alias: string,
+        name: string,
+        description?: string | null,
+        order: number,
+        orderDesc?: boolean | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        showDescriptionPage?: string | null,
+        showThumbnailPage?: string | null,
+        hide?: boolean | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      order: number,
+      title: string,
+      description?: string | null,
+      content?: string | null,
+      tags?: Array< string | null > | null,
+      thumbnail?: string | null,
+      thumbnailSrc?: string | null,
+      thumbnailCropper?: string | null,
+      changeFreq?: PageChangeFreq | null,
+      priority?: number | null,
+      hide?: boolean | null,
+      search?: string | null,
+      createdAt?: string | null,
+      components?:  {
+        __typename: "ModelComponentConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListComponentsByPageOrderQueryVariables = {
+  pageID: string,
+  order?: ModelIntKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelComponentFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListComponentsByPageOrderQuery = {
+  listComponentsByPageOrder?:  {
+    __typename: "ModelComponentConnection",
+    items:  Array< {
+      __typename: "Component",
+      id: string,
+      pageID: string,
+      order: number,
+      component: string,
+      content: string,
+      config?: string | null,
+      page?:  {
+        __typename: "Page",
+        id: string,
+        alias: string,
+        status: PageStatus,
+        menuID: string,
+        order: number,
+        title: string,
+        description?: string | null,
+        content?: string | null,
+        tags?: Array< string | null > | null,
+        thumbnail?: string | null,
+        thumbnailSrc?: string | null,
+        thumbnailCropper?: string | null,
+        changeFreq?: PageChangeFreq | null,
+        priority?: number | null,
+        hide?: boolean | null,
+        search?: string | null,
+        createdAt?: string | null,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type ListPostsByUserCreatedAtQueryVariables = {
   userID: string,
   createdAt?: ModelStringKeyConditionInput | null,
@@ -4268,13 +5288,13 @@ export type ListPostsByUserCreatedAtQuery = {
     items:  Array< {
       __typename: "Post",
       id: string,
-      type: PostProviders,
       title: string,
       description?: string | null,
       content?: string | null,
-      vimeoCode?: string | null,
-      videoKey?: string | null,
       thumbnail?: string | null,
+      videoProvider?: VideoProviders | null,
+      video?: string | null,
+      search?: string | null,
       createdAt?: string | null,
       userID: string,
       user?:  {
@@ -4322,13 +5342,13 @@ export type ListTagsByPostQuery = {
       post?:  {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -4338,7 +5358,7 @@ export type ListTagsByPostQuery = {
         __typename: "Tag",
         id: string,
         name: string,
-        type: TagTypes,
+        type: string,
         status: TagStatus,
         createdAt: string,
         updatedAt: string,
@@ -4368,13 +5388,13 @@ export type ListPostsByTagQuery = {
       post?:  {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -4384,7 +5404,7 @@ export type ListPostsByTagQuery = {
         __typename: "Tag",
         id: string,
         name: string,
-        type: TagTypes,
+        type: string,
         status: TagStatus,
         createdAt: string,
         updatedAt: string,
@@ -4415,13 +5435,13 @@ export type ListCommentsByPostCreatedAtQuery = {
       post?:  {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,
@@ -4467,13 +5487,13 @@ export type ListCommentsByUserCreatedAtQuery = {
       post?:  {
         __typename: "Post",
         id: string,
-        type: PostProviders,
         title: string,
         description?: string | null,
         content?: string | null,
-        vimeoCode?: string | null,
-        videoKey?: string | null,
         thumbnail?: string | null,
+        videoProvider?: VideoProviders | null,
+        video?: string | null,
+        search?: string | null,
         createdAt?: string | null,
         userID: string,
         updatedAt: string,

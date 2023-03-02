@@ -9,9 +9,6 @@ const nextConfig = {
     'ionicons'
   ],
   env: {
-    stackCodeName: process.env.stackCodeName,
-    branchName: process.env.branchName,
-    region: process.env.region,
     userPoolId: process.env.userPoolId,
     userPoolClientId: process.env.userPoolClientId,
     userPoolRegion: process.env.userPoolRegion,
@@ -21,6 +18,7 @@ const nextConfig = {
     bucketName: process.env.bucketName,
     bucketRegion: process.env.bucketRegion,
     bucketCloudFront: process.env.bucketCloudFront,
+    tagTypes: ["MODALITIES", "SPECIALTIES", "REGIONS", "GROUPS", "AREAS"]
   }
 }
 

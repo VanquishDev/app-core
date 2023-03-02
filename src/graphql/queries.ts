@@ -40,7 +40,6 @@ export const getUser = /* GraphQL */ `
         birthDay
         notes
         allowCookiesPreference
-        allowCookiesStatistic
         createdAt
         updatedAt
       }
@@ -92,13 +91,13 @@ export const getUser = /* GraphQL */ `
       posts {
         items {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -148,7 +147,6 @@ export const getProfile = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -181,7 +179,6 @@ export const getProfile = /* GraphQL */ `
       birthDay
       notes
       allowCookiesPreference
-      allowCookiesStatistic
       createdAt
       updatedAt
     }
@@ -278,6 +275,41 @@ export const listMidias = /* GraphQL */ `
     }
   }
 `;
+export const listMenus = /* GraphQL */ `
+  query ListMenus(
+    $id: ID
+    $filter: ModelMenuFilterInput
+    $limit: Int
+    $nextToken: String
+    $sortDirection: ModelSortDirection
+  ) {
+    listMenus(
+      id: $id
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      sortDirection: $sortDirection
+    ) {
+      items {
+        id
+        alias
+        name
+        description
+        order
+        orderDesc
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        showDescriptionPage
+        showThumbnailPage
+        hide
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const getUserByEmail = /* GraphQL */ `
   query GetUserByEmail(
     $email: AWSEmail!
@@ -317,7 +349,6 @@ export const getUserByEmail = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -381,7 +412,6 @@ export const getUserByPhone = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -447,7 +477,6 @@ export const listUsersByStatusCreatedAt = /* GraphQL */ `
           birthDay
           notes
           allowCookiesPreference
-          allowCookiesStatistic
           createdAt
           updatedAt
         }
@@ -513,7 +542,6 @@ export const listUsersByBirthDay = /* GraphQL */ `
         birthDay
         notes
         allowCookiesPreference
-        allowCookiesStatistic
         createdAt
         updatedAt
       }
@@ -699,7 +727,7 @@ export const listTagsByUserTag = /* GraphQL */ `
 `;
 export const listTagsByTypeName = /* GraphQL */ `
   query ListTagsByTypeName(
-    $type: TagTypes!
+    $type: String!
     $name: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelTagFilterInput
@@ -942,6 +970,270 @@ export const listNotifyByUserCreatedAt = /* GraphQL */ `
     }
   }
 `;
+export const listMenuByAlias = /* GraphQL */ `
+  query ListMenuByAlias(
+    $alias: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelMenuFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMenuByAlias(
+      alias: $alias
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        alias
+        name
+        description
+        order
+        orderDesc
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        showDescriptionPage
+        showThumbnailPage
+        hide
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPageByAlias = /* GraphQL */ `
+  query ListPageByAlias(
+    $alias: String!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPageByAlias(
+      alias: $alias
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPagesByStatusMenuOrder = /* GraphQL */ `
+  query ListPagesByStatusMenuOrder(
+    $status: PageStatus!
+    $menuIDOrder: ModelPagePagesByStatusMenuOrderCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPagesByStatusMenuOrder(
+      status: $status
+      menuIDOrder: $menuIDOrder
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listPagesByStatusMenuTitle = /* GraphQL */ `
+  query ListPagesByStatusMenuTitle(
+    $status: PageStatus!
+    $menuIDTitle: ModelPagePagesByStatusMenuTitleCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPagesByStatusMenuTitle(
+      status: $status
+      menuIDTitle: $menuIDTitle
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        alias
+        status
+        menuID
+        menu {
+          id
+          alias
+          name
+          description
+          order
+          orderDesc
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          showDescriptionPage
+          showThumbnailPage
+          hide
+          createdAt
+          updatedAt
+        }
+        order
+        title
+        description
+        content
+        tags
+        thumbnail
+        thumbnailSrc
+        thumbnailCropper
+        changeFreq
+        priority
+        hide
+        search
+        createdAt
+        components {
+          nextToken
+        }
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const listComponentsByPageOrder = /* GraphQL */ `
+  query ListComponentsByPageOrder(
+    $pageID: ID!
+    $order: ModelIntKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelComponentFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listComponentsByPageOrder(
+      pageID: $pageID
+      order: $order
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pageID
+        order
+        component
+        content
+        config
+        page {
+          id
+          alias
+          status
+          menuID
+          order
+          title
+          description
+          content
+          tags
+          thumbnail
+          thumbnailSrc
+          thumbnailCropper
+          changeFreq
+          priority
+          hide
+          search
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 export const listPostsByUserCreatedAt = /* GraphQL */ `
   query ListPostsByUserCreatedAt(
     $userID: ID!
@@ -961,13 +1253,13 @@ export const listPostsByUserCreatedAt = /* GraphQL */ `
     ) {
       items {
         id
-        type
         title
         description
         content
-        vimeoCode
-        videoKey
         thumbnail
+        videoProvider
+        video
+        search
         createdAt
         userID
         user {
@@ -1014,13 +1306,13 @@ export const listTagsByPost = /* GraphQL */ `
         postID
         post {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -1061,13 +1353,13 @@ export const listPostsByTag = /* GraphQL */ `
         postID
         post {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -1110,13 +1402,13 @@ export const listCommentsByPostCreatedAt = /* GraphQL */ `
         postID
         post {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
@@ -1164,13 +1456,13 @@ export const listCommentsByUserCreatedAt = /* GraphQL */ `
         postID
         post {
           id
-          type
           title
           description
           content
-          vimeoCode
-          videoKey
           thumbnail
+          videoProvider
+          video
+          search
           createdAt
           userID
           updatedAt
